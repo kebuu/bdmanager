@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="hibernateSessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="datasource"></property>
+		<property name="hibernateProperties">
+			<value>
+				hibernate.format_sql=false
+				hibernate.show_sql=false
+				hibernate.connection.autocommit=false
+				hibernate.default_schema=${datasource.schema}
+				hibernate.dialect=${hibernate.dialect}
+				hibernate.jdbc.batch_size=20
+			</value>
+		</property>
+		<property name="packagesToScan">
+			<array>
+				<value>com.pmsipilot.parser.generic</value>
+			</array>
+		</property>
+	</bean>
+	
+	<bean id="txManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="hibernateSessionFactory" />
+	</bean>
+
+</beans>
