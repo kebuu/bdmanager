@@ -1,10 +1,11 @@
 package com.cta.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import lombok.Data;
@@ -17,10 +18,8 @@ public class Bd {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long id;
 	
-	@ManyToOne
-	@JoinColumn(name="serie_id")
+	@ManyToOne(fetch=FetchType.EAGER, targetEntity=Serie.class, cascade=CascadeType.ALL)
 	protected Serie serie;
 	
 	protected String title;
-	protected Integer positionInSerie;
 }
