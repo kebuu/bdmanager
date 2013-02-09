@@ -6,4 +6,13 @@
 	<import resource="classpath:spring/db-context.xml"/>
 	<import resource="classpath:spring/hibernate-context.xml"/>
 	
+	<!-- SERVICE -->
+	<bean id="crudService" class="com.cta.service.impl.DefaultCrudService">
+		<property name="crudDao" ref="crudDao" />
+	</bean>
+	
+	<!-- DAO -->
+	<bean id="crudDao" class="com.cta.dao.impl.DefaultCrudDao">
+		<property name="sessionFactory" ref="hibernateSessionFactory"/>
+	</bean>
 </beans>
