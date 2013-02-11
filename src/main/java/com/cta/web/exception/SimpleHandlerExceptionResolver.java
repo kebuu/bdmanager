@@ -17,7 +17,7 @@ public class SimpleHandlerExceptionResolver implements HandlerExceptionResolver 
     	MappingJackson2JsonView view = new MappingJackson2JsonView();
         view.setExtractValueFromSingleKeyModel(true);
         Map<String,Object> model = new HashMap<String,Object>();
-        model.put("error", new ExceptionInfo("test", "test"));
+        model.put("error", new ExceptionInfo("no.code", ex.getMessage()));
         
         return new ModelAndView(view, model);
     }

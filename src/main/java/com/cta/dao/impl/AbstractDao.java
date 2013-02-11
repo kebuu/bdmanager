@@ -8,9 +8,9 @@ import org.hibernate.SessionFactory;
 @Setter
 public abstract class AbstractDao {
 
-	protected SessionFactory sessionFactory2;
+	protected SessionFactory sessionFactory;
 
 	protected Session getSession() {
-		return sessionFactory2.getCurrentSession();
+		return sessionFactory.getCurrentSession();
 	}
 }

@@ -1,5 +1,6 @@
 package com.cta.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -33,7 +34,7 @@ public class Serie {
 	@JoinColumn(name="serie_id", nullable=false, unique=false, updatable=false)
 	@OrderColumn(name="positionInSerie", nullable=false)
 	@Fetch(FetchMode.JOIN)
-	protected List<Bd> bds;
+	protected List<Bd> bds = new ArrayList<Bd>();
 	
 	protected String name;
 	protected String synopsis;
