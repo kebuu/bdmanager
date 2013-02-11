@@ -2,4 +2,6 @@
 /.project
 /.settings
 *.log
+/target
+/mem
 rebel.xml
