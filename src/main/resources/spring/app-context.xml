@@ -5,6 +5,7 @@
 
 	<import resource="classpath:spring/db-context.xml"/>
 	<import resource="classpath:spring/hibernate-context.xml"/>
+	<import resource="classpath:spring/jmx-context.xml"/>
 	
 	<!-- CONFIG -->
 	<bean id="appConfig" class="com.cta.config.impl.AppConfigImpl">

@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.cta</groupId>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<artifactId>bdmanager</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<properties>
@@ -29,7 +29,7 @@
 				<version>8.1.8.v20121106</version>
 				<configuration>
 					<webApp>
-						<contextPath>/testing</contextPath>
+						<contextPath>/</contextPath>
 					</webApp>
 				</configuration>
 			</plugin>
@@ -39,7 +39,14 @@
 				<configuration>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
-			</plugin>		
+			</plugin>
+		</plugins>
+	</build>
+	<profiles>
+		<profile>
+			<id>standalone</id>
+			<build>
+				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-shade-plugin</artifactId>
@@ -47,6 +54,7 @@
 						<configuration>
 							<filters>
 								<filter>
+									<!-- Probleme de security manager -->
 									<artifact>*:*</artifact>
 									<excludes>
 										<exclude>META-INF/*.SF</exclude>
@@ -54,14 +62,13 @@
 										<exclude>META-INF/*.RSA</exclude>
 									</excludes>
 								</filter>
-							</filters>
+							</filters>						
 							<transformers>
-								<transformer
-									implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+									<!-- Probleme lie aux namespaces xml de spring -->
+								<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 									<resource>META-INF/spring.handlers</resource>
 								</transformer>
-								<transformer
-									implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+								<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 									<resource>META-INF/spring.schemas</resource>
 								</transformer>
 							</transformers>
@@ -81,16 +88,24 @@
 						<version>2.4</version>
 						<configuration>
 							<archive>
-								<index>true</index>
 								<manifest>
 									<addClasspath>true</addClasspath>
 									<mainClass>com.cta.web.BdManagerEmbededServer</mainClass>
 								</manifest>
 							</archive>
 						</configuration>
-					</plugin>				
-		</plugins>
-	</build>
+					</plugin>
+				</plugins>
+			</build>
+			<dependencies>
+				<dependency>
+					<groupId>org.eclipse.jetty</groupId>
+					<artifactId>jetty-servlet</artifactId>
+					<version>${jetty.version}</version>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
 	<dependencies>
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -136,7 +151,7 @@
 			<groupId>commons-cli</groupId>
 			<artifactId>commons-cli</artifactId>
 			<version>1.2</version>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
@@ -205,7 +220,7 @@
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-webapp</artifactId>
 			<version>${jetty.version}</version>
-			<scope>test</scope>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -222,5 +237,11 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
 		</dependency>
+		<dependency>
+			<groupId>com.jayway.jsonpath</groupId>
+			<artifactId>json-path</artifactId>
+			<version>0.8.1</version>
+			<scope>test</scope>
+		</dependency>		
 	</dependencies>
 </project>

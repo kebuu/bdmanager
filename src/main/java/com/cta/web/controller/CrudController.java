@@ -1,6 +1,8 @@
 package com.cta.web.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,8 +28,10 @@ public class CrudController {
 	
 	@RequestMapping(value="/crud/{resource}", method=RequestMethod.POST)
 	@ResponseBody
-	public Long create(@PathVariable("resource") String resourceName, @RequestBody String requestBody) {
-		return crudService.create(resourceName, requestBody);
+	public Map<String, Long> create(@PathVariable("resource") String resourceName, @RequestBody String requestBody) {
+		Map<String, Long> result = new HashMap<String, Long>();
+		result.put("id", crudService.create(resourceName, requestBody));
+		return result;
 	}
 
 	@RequestMapping(value="/crud/{resource}", method=RequestMethod.PUT)

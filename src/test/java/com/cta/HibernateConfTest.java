@@ -8,14 +8,11 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.cta.model.Serie;
 import com.cta.utils.MyListUtils;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 public class HibernateConfTest extends BaseSpringTest {
 
 	@Autowired

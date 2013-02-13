@@ -3,14 +3,17 @@ package com.cta;
 import javax.sql.DataSource;
 
 import org.junit.Before;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @ContextConfiguration(locations={"classpath:spring/test-context.xml"})
-public class BaseSpringTest {
+@RunWith(SpringJUnit4ClassRunner.class)
+public abstract class BaseSpringTest {
 
 	@Autowired
 	protected DataSource datasource;
