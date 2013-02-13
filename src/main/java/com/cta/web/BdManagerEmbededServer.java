@@ -3,6 +3,7 @@ package com.cta.web;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.OptionBuilder;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -11,12 +12,18 @@ import org.springframework.web.servlet.DispatcherServlet;
 
 
 @Slf4j
+@SuppressWarnings("static-access")
 public abstract class BdManagerEmbededServer extends AbstractMain {
 	
 	static {
 		options.addOption("h", "help", false, "Affiche l'aide de la ligne de commande");
 		options.addOption("p", "port", false, "Indique le port http (8080 par defaut)");
 		options.addOption("c", "context-path", false, "Indique le nom du contexte path (/ par defaut).");
+		options.addOption(OptionBuilder.withArgName("property=value" )
+                .hasArgs(2)
+                .withValueSeparator()
+                .withDescription( "Proprietes systemes java classiques" )
+                .create( "D" ));
 	}
 		
 	public static void main(String[] args) {

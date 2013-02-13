@@ -1,7 +1,6 @@
 package com.cta.service.impl;
 
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -61,7 +60,7 @@ public class DefaultCrudService implements CrudService {
 		Set<BeanDefinition> findCandidateComponents = tmp.findCandidateComponents("com.cta.model");
 		
 		if(findCandidateComponents.isEmpty()) {
-			throw new AppException(MessageFormat.format("No resource found with name ''{0}''", resourceName));
+			throw new AppException("unknown.resource.name", resourceName);
 		} else {
 			try {
 				BeanDefinition firstResourceMatch = findCandidateComponents.iterator().next();
@@ -77,7 +76,7 @@ public class DefaultCrudService implements CrudService {
 		try {
 			return jsonObjectMapper.readValue(jsonData, clazz);
 		} catch (IOException  e) {
-			throw new AppException(MessageFormat.format("Cannot populate class ''{0}'' with data ''{1}''", clazz.getCanonicalName(), jsonData)) ;
+			throw new AppException("resource.population.error", clazz.getCanonicalName(), jsonData);
 		} 
 	}
 }
