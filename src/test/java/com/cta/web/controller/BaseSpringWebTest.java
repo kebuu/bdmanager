@@ -42,7 +42,7 @@ public class BaseSpringWebTest {
           .andExpect(jsonPath("$.id").value(1));
     }
 
-	private String toJson(String fakeJson) {
+	protected String toJson(String fakeJson) {
 		return fakeJson.replaceAll("'", "\"");
 	}
 }

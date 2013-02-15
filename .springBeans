@@ -12,6 +12,7 @@
 		<config>src/main/resources/spring/app-context.xml</config>
 		<config>src/main/resources/spring/main-context.xml</config>
 		<config>src/main/resources/spring/web-context.xml</config>
+		<config>src/main/resources/spring/security-context.xml</config>
 	</configs>
 	<configSets>
 		<configSet>
