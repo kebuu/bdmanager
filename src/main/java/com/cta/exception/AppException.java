@@ -3,10 +3,12 @@ package com.cta.exception;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class AppException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
@@ -20,11 +22,13 @@ public class AppException extends RuntimeException {
 		super(cause);
 	}
 
-	public AppException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
 	public AppException(String code, Object... arguments) {
+		this.code = code;
+		this.arguments = arguments;
+	}
+	
+	public AppException(String code, Throwable cause, Object... arguments) {
+		super(cause);
 		this.code = code;
 		this.arguments = arguments;
 	}

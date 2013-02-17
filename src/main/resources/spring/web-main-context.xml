@@ -6,20 +6,6 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
 	<import resource="classpath:spring/main-context.xml"/>
-	<import resource="classpath:spring/security-context.xml"/>
+	<import resource="classpath:spring/web-app-context.xml"/>
 
-	<context:component-scan base-package="com.cta.web.controller"/>
-	
-	<mvc:annotation-driven />
-	<mvc:resources location="classpath:/static/image/favicon.ico" mapping="/favicon.ico"/>
-	<mvc:resources location="classpath:/static/" mapping="/static/**"/>
-	
-	<bean id="exceptionHandler" class="com.cta.web.exception.SimpleHandlerExceptionResolver">
-		<property name="appConfig" ref="appConfig" />
-		<property name="localResolver" ref="localeResolver" />
-		<property name="messageSource" ref="messageSource" />
-	</bean>
-	
-	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver" />
-	
 </beans>

@@ -56,7 +56,7 @@ public abstract class BdManagerEmbededServer extends AbstractMain {
 				
 				final XmlWebApplicationContext applicationContext = new XmlWebApplicationContext();
 				applicationContext.setServletContext(context.getServletContext());
-				applicationContext.setConfigLocation("classpath:spring/web-context.xml");
+				applicationContext.setConfigLocation("classpath:spring/web-main-context.xml");
 				applicationContext.refresh();
 				applicationContext.registerShutdownHook();
 				

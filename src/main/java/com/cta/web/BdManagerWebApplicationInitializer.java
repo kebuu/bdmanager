@@ -23,7 +23,7 @@ public class BdManagerWebApplicationInitializer implements WebApplicationInitial
         
 		XmlWebApplicationContext dispatcherContext = new XmlWebApplicationContext();
 		dispatcherContext.setServletContext(servletContext);
-		String configLocation = "classpath:spring/web-context.xml";
+		String configLocation = "classpath:spring/web-main-context.xml";
 		dispatcherContext.setConfigLocation(configLocation);
 		dispatcherContext.refresh();
 		

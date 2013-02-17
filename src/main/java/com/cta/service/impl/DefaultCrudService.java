@@ -31,6 +31,12 @@ public class DefaultCrudService implements CrudService {
 		Class<?> className = getQualifiedResourceClassName(resourceName);
 		return (List<Object>) crudDao.list(className.getSimpleName());
 	}
+	
+	@Override
+	public Object get(String resourceName, Long id) {
+		Class<?> rsourceClazz = getQualifiedResourceClassName(resourceName);
+		return crudDao.get(rsourceClazz, id);
+	}
 
 	@Override
 	public Long create(String resourceName, String jsonData) {
@@ -50,10 +56,21 @@ public class DefaultCrudService implements CrudService {
 		return crudDao.delete(resource);
 	}
 	
+	/**
+	 * Cree une instance du type donne et la peuple avec les donnees fournies au format json
+	 * @param jsonData Les donnees au format json
+	 * @param resourceName Le type de l'instance a creer
+	 * @return L'objet cree et peuple
+	 */
 	protected Object getResource(String resourceName, String jsonData) {
 		return getResourceInstance(jsonData, getQualifiedResourceClassName(resourceName));
 	}
 
+	/**
+	 * Recupere la classe correspondant au nom donne a partir du package des models
+	 * @param resourceName Le nom de la ressource cherchee
+	 * @return La classe associee au nom de la ressource cherchee
+	 */
 	protected Class<?> getQualifiedResourceClassName(String resourceName) {
 		ClassPathScanningCandidateComponentProvider tmp = new ClassPathScanningCandidateComponentProvider(false);
 		tmp.addIncludeFilter(new RegexPatternTypeFilter(Pattern.compile("(?i).*[.]" + resourceName + "$")));
@@ -72,11 +89,17 @@ public class DefaultCrudService implements CrudService {
 		}
 	}
 	
+	/**
+	 * Cree une instance du type donne et la peuple avec les donnees fournies au format json
+	 * @param jsonData Les donnees au format json
+	 * @param clazz Le type de l'instance a creer
+	 * @return L'objet cree et peuple
+	 */
 	protected Object getResourceInstance(String jsonData, Class<?> clazz) {
 		try {
 			return jsonObjectMapper.readValue(jsonData, clazz);
-		} catch (IOException  e) {
-			throw new AppException("resource.population.error", clazz.getCanonicalName(), jsonData);
+		} catch (IOException e) {
+			throw new AppException("resource.population.error", e, clazz.getCanonicalName(), jsonData);
 		} 
 	}
 }

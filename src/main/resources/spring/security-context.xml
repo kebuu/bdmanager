@@ -3,16 +3,6 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<security:http>
-		<security:anonymous enabled="true"/>
-		<security:form-login />
-		<security:access-denied-handler error-page="/static/html/forbidden.html"/>
-		<security:logout logout-url="/logout" logout-success-url="/static/html/home.html"/>
-		<security:intercept-url pattern="/static/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-		<security:intercept-url pattern="/crud/**" access="ROLE_ADMIN" />
-		<security:intercept-url pattern="/**" access="ROLE_USER" />
-	</security:http>
-
 	<security:authentication-manager>
 		<security:authentication-provider>
 			<security:user-service>
@@ -21,4 +11,24 @@
 			</security:user-service>
 		</security:authentication-provider>
 	</security:authentication-manager>
+
+	<beans profile="secure">
+		<security:http>
+			<security:anonymous enabled="true" />
+			<security:form-login />
+			<security:access-denied-handler error-page="/static/html/forbidden.html" />
+			<security:logout logout-url="/logout" logout-success-url="/static/html/home.html" />
+			<security:intercept-url pattern="/static/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+			<security:intercept-url pattern="/crud/**" access="ROLE_ADMIN" />
+			<security:intercept-url pattern="/**" access="ROLE_USER" />
+		</security:http>
+
+	</beans>
+
+	<beans profile="!secure">
+		<security:http auto-config="true">
+			<security:intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		</security:http>
+	</beans>
+
 </beans>

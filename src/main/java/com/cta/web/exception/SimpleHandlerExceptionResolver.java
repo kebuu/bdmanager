@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.context.MessageSource;
@@ -19,6 +20,7 @@ import com.cta.config.AppConfig;
 import com.cta.exception.AppException;
 
 @Setter
+@Slf4j
 public class SimpleHandlerExceptionResolver implements HandlerExceptionResolver {
 
 	protected AppConfig appConfig;
@@ -30,7 +32,9 @@ public class SimpleHandlerExceptionResolver implements HandlerExceptionResolver 
     	MappingJackson2JsonView view = new MappingJackson2JsonView();
         view.setExtractValueFromSingleKeyModel(true);
         Map<String,Object> model = new HashMap<String,Object>();
-        model.put("error", getExceptionInfo(ex, appConfig.isDebugModeActive(), request));
+        ExceptionInfo exceptionInfo = getExceptionInfo(ex, appConfig.isDebugModeActive(), request);
+		model.put("error", exceptionInfo);
+        log.error(exceptionInfo.toString());
         return new ModelAndView(view, model);
     }
     

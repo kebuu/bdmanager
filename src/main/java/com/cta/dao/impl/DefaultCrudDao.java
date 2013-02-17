@@ -42,7 +42,12 @@ public class DefaultCrudDao extends AbstractDao implements CrudDao {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<? extends Object> list(String resourceName) {
-		return getSession().createQuery("from " + resourceName).list();
+	public List<? extends Object> list(String resourceClassName) {
+		return getSession().createQuery("from " + resourceClassName).list();
+	}
+	
+	@Override
+	public Object get(Class<?> resourceClass, Long id) {
+		return getSession().get(resourceClass, id);
 	}
 }

@@ -26,6 +26,12 @@ public class CrudController {
 		return crudService.list(resourceName);
 	}
 	
+	@RequestMapping(value="/crud/{resource}/{id}", method=RequestMethod.GET)
+	@ResponseBody
+	public Object get(@PathVariable("resource") String resourceName, @PathVariable("id") Long id) {
+		return crudService.get(resourceName, id);
+	}
+	
 	@RequestMapping(value="/crud/{resource}", method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Long> create(@PathVariable("resource") String resourceName, @RequestBody String requestBody) {
