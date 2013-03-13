@@ -7,6 +7,7 @@
 
 	<context:property-placeholder ignore-resource-not-found="true" location="classpath:conf/test-config.properties" />
 	
+	<import resource="classpath:spring/jmx-test-context.xml"/>
 	<import resource="classpath:spring/app-context.xml"/>
 	
 </beans>

@@ -6,8 +6,10 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,5 +47,29 @@ public class HibernateConfigurationTest extends BaseSpringTest {
 		Bd bd = (Bd) serieQuery.uniqueResult();
 		assertNotNull(bd);
 		assertNotNull(bd.getSerie());
+		
+		sessionFactory.getCurrentSession().createCriteria(Serie.class).createAlias("bds", "bds").add(Restrictions.eq("bds.title", "Hestia")).list();
+	}
+	
+	@Test
+	@Transactional
+	public void testSomeCriteria() {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Serie.class);
+		criteria.createCriteria("bds").add(Restrictions.eq("title", "Hestia"));
+		Serie leRegulateurSerie = (Serie) criteria.uniqueResult();
+		assertEquals("Le régulateur", leRegulateurSerie.getName());
+		
+		criteria = sessionFactory.getCurrentSession().createCriteria(Serie.class);
+		criteria.createCriteria("bds").add(Restrictions.eq("title", "Hestia"))
+		.createCriteria("serie").add(Restrictions.eq("name", "Le régulateur"));
+		leRegulateurSerie = (Serie) criteria.uniqueResult();
+		assertEquals("Le régulateur", leRegulateurSerie.getName());
+		
+		criteria = sessionFactory.getCurrentSession().createCriteria(Bd.class);
+		criteria.createCriteria("serie").add(Restrictions.eq("name", "Le régulateur"))
+		.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		List<?> result = criteria.list();
+		assertEquals(4, result.size());
+		
 	}
 } 

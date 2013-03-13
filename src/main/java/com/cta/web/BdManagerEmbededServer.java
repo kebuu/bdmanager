@@ -26,7 +26,7 @@ public abstract class BdManagerEmbededServer extends AbstractMain {
 	
 	static {
 		options.addOption("h", "help", false, "Affiche l'aide de la ligne de commande");
-		options.addOption("p", "port", false, "Indique le port http (8080 par defaut)");
+		options.addOption("p", "port", false, "Indique le port http (8090 par defaut)");
 		options.addOption("c", "context-path", false, "Indique le nom du contexte path (/ par defaut).");
 		options.addOption(OptionBuilder.withArgName("property=value" )
                 .hasArgs(2)
@@ -41,7 +41,7 @@ public abstract class BdManagerEmbededServer extends AbstractMain {
 		if(cmd.hasOption('h')) {
 			displayUsage("BdManagerEmbededServer");
 		} else {
-			int port = getOptionValueInt(cmd, "p", 8082);
+			int port = getOptionValueInt(cmd, "p", 8090);
 			String contextPath = getOptionValueString(cmd, "c", "/");
 			
 			log.info("Starting on port : " + port);

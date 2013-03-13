@@ -5,7 +5,6 @@
 
 	<import resource="classpath:spring/db-context.xml"/>
 	<import resource="classpath:spring/hibernate-context.xml"/>
-	<import resource="classpath:spring/jmx-context.xml"/>
 
 	<!-- CONFIG -->
 	<bean id="appConfig" class="com.cta.config.impl.AppConfigImpl">
@@ -24,13 +23,25 @@
 	</bean>
 	
 	<!-- SERVICE -->
+	<bean id="modelService" class="com.cta.service.impl.DefaultModelService" />
+	
 	<bean id="crudService" class="com.cta.service.impl.DefaultCrudService">
 		<property name="crudDao" ref="crudDao" />
+		<property name="modelService" ref="modelService" />
+	</bean>
+	
+	<bean id="searchService" class="com.cta.service.impl.DefaultSearchService">
+		<property name="searchDao" ref="searchDao" />
+		<property name="modelService" ref="modelService" />
 	</bean>
 	
 	<!-- DAO -->
-	<bean id="crudDao" class="com.cta.dao.impl.DefaultCrudDao">
+	<bean id="dao" abstract="true">
 		<property name="sessionFactory" ref="hibernateSessionFactory"/>
 	</bean>
+	
+	<bean id="crudDao" class="com.cta.dao.impl.DefaultCrudDao" parent="dao" />
+	
+	<bean id="searchDao" class="com.cta.dao.impl.DefaultSearchDao" parent="dao" />
 	
 </beans>

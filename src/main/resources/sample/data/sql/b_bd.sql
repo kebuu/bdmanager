@@ -1,0 +1,16 @@
+INSERT INTO Bd (id, position_in_serie, title, serie_id) values (-1, 0, 'Le combat ordinaire', -1);
+INSERT INTO Bd (id, position_in_serie, title, serie_id) values (-2, 1, 'Les quantités négligeables', -1);
+INSERT INTO Bd (id, position_in_serie, title, serie_id) values (-3, 2, 'Ce qui est précieux', -1);
+INSERT INTO Bd (id, position_in_serie, title, serie_id) values (-4, 3, 'Planter des clous', -1);
+INSERT INTO Bd (id, position_in_serie, title, serie_id) values (-5, 0, 'Ambrosia', -2);
+INSERT INTO Bd (id, position_in_serie, title, serie_id) values (-6, 1, 'Hestia', -2);
+INSERT INTO Bd (id, position_in_serie, title, serie_id) values (-7, 2, 'Ophidia', -2);
+INSERT INTO Bd (id, position_in_serie, title, serie_id) values (-8, 3, '666 I.A.', -2);
+INSERT INTO Bd (id, position_in_serie, title, serie_id) values (-9, 0, 'L''héritier', -3);
+INSERT INTO Bd (id, position_in_serie, title, serie_id) values (-10, 1, 'Le groupe W', -3);
+INSERT INTO Bd (id, position_in_serie, title, serie_id) values (-11, 2, 'O.P.A', -3);
+INSERT INTO Bd (id, position_in_serie, title, serie_id) values (-12, 0, 'Intégrale (1,2,3)', -4);
+INSERT INTO Bd (id, position_in_serie, title, serie_id) values (-13, 0, 'Le sommeil du monstre', -5);
+INSERT INTO Bd (id, position_in_serie, title, serie_id) values (-14, 1, '32 décembre', -5);
+INSERT INTO Bd (id, position_in_serie, title, serie_id) values (-15, 2, 'Rendez-vous à Paris', -5);
+INSERT INTO Bd (id, position_in_serie, title, serie_id) values (-16, 3, 'Quatre ?', -5);

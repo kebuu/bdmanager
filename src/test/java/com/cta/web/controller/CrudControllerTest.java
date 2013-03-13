@@ -4,7 +4,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -20,7 +19,7 @@ public class CrudControllerTest extends BaseSpringWebTest {
     	//CREATE
         this.mockMvc.perform(post("/crud/serie").accept(MediaType.APPLICATION_JSON)
           .content(toJson("{'name':'ma serie', 'synopsis': 'syno'}")))
-          .andExpect(status().isOk()).andDo(print())
+          .andExpect(status().isOk())
           .andExpect(jsonPath("$.id").value(1));
         
         this.mockMvc.perform(post("/crud/serie").accept(MediaType.APPLICATION_JSON)
@@ -35,7 +34,6 @@ public class CrudControllerTest extends BaseSpringWebTest {
         
         //READ
         this.mockMvc.perform(get("/crud/serie").accept(MediaType.APPLICATION_JSON))
-        		.andDo(print())
         		.andExpect(status().isOk())
         		.andExpect(jsonPath("$[1]").exists());
 
@@ -44,7 +42,6 @@ public class CrudControllerTest extends BaseSpringWebTest {
         .andExpect(jsonPath("$.id").value(1));
         
         this.mockMvc.perform(get("/crud/bd/-1").accept(MediaType.APPLICATION_JSON))
-        .andDo(print())
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id").value(-1));
         
