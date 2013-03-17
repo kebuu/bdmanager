@@ -15,7 +15,7 @@ import com.cta.model.Serie;
 
 @Controller
 @Slf4j
-@RequestMapping("/")
+@RequestMapping("/test")
 public class TestController {
 
 	@RequestMapping(value="/echo", method=RequestMethod.GET)

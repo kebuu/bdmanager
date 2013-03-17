@@ -1,9 +1,6 @@
 package com.cta.web;
 
-import java.util.EnumSet;
-
-import javax.servlet.DispatcherType;
-import javax.servlet.FilterRegistration;
+import javax.servlet.ServletContext;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,7 +13,6 @@ import org.eclipse.jetty.util.component.AbstractLifeCycle.AbstractLifeCycleListe
 import org.eclipse.jetty.util.component.LifeCycle;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.XmlWebApplicationContext;
-import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.DispatcherServlet;
 
 
@@ -47,38 +43,54 @@ public abstract class BdManagerEmbededServer extends AbstractMain {
 			log.info("Starting on port : " + port);
 			log.info("Starting on context path : " + contextPath);
 			
+			Server server = null;
 			try {
-				final ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-				context.setContextPath(contextPath);
+				// Create servlet context holder
+				ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
+				servletContextHandler.setContextPath(contextPath);
 				
-				FilterRegistration.Dynamic springSecurityFilter = context.getServletContext().addFilter("springSecurityFilterChain", new DelegatingFilterProxy());
-		        springSecurityFilter.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD), true, "/*");
+				// Create servlet context
+				final ServletContext servletContext = servletContextHandler.getServletContext();
 				
-				final XmlWebApplicationContext applicationContext = new XmlWebApplicationContext();
-				applicationContext.setServletContext(context.getServletContext());
-				applicationContext.setConfigLocation("classpath:spring/web-main-context.xml");
-				applicationContext.refresh();
-				applicationContext.registerShutdownHook();
+				// Configure spring security
+				BdManagerWebConfigurerHelper.configureSpringSecurityFilter(servletContext);
 				
-				DispatcherServlet dispatcherServlet = new DispatcherServlet(applicationContext);
-				dispatcherServlet.setDispatchOptionsRequest(true);
+				// Configure spring web context
+				final XmlWebApplicationContext webApplicationContext = BdManagerWebConfigurerHelper.configureSpringContext(servletContext);
+				webApplicationContext.registerShutdownHook();
 				
-				context.addServlet(new ServletHolder(dispatcherServlet), "/*");
-				context.addLifeCycleListener(new AbstractLifeCycleListener() {
+				// Create dispatcher servlet
+				DispatcherServlet dispatcherServlet = BdManagerWebConfigurerHelper.createDispatcherServlet(webApplicationContext);
+				
+				// Use dispatcher servlet in servlet context holder
+				servletContextHandler.addServlet(new ServletHolder(dispatcherServlet), "/*");
+				servletContextHandler.addLifeCycleListener(new AbstractLifeCycleListener() {
 					
 					@Override
 					public void lifeCycleStarting(LifeCycle event) {
-						context.getServletContext().addListener(new ContextLoaderListener(applicationContext));
+						servletContext.addListener(new ContextLoaderListener(webApplicationContext));
 					}
 				});
 				
-				Server server = new Server(port);
-				server.setHandler(context);
+				// Start server
+				server = new Server(port);
+				server.setHandler(servletContextHandler);
 				server.start();
 				server.join();
 			} catch (Exception e) {
+				stopServer(server);
 				throw new RuntimeException(e);
 			} 
+		}
+	}
+
+	private static void stopServer(Server server) {
+		if(server != null) {
+			try {
+				server.stop();
+			} catch (Exception e1) {
+				// Nothing to do
+			}
 		}
 	}	
 }

@@ -39,7 +39,10 @@ public class H2DatabaseManager implements InitializingBean, DisposableBean {
 					log.warn("Can't start h2 tcp server because port " + port + " is not available");
 				}
 			}
-			server.start();
+			
+			if(server != null) {
+				server.start();
+			}
 		}
 	}
 
