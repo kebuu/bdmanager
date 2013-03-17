@@ -6,3 +6,5 @@
 /mem
 rebel.xml
 rebel-remote.xml
+*.h2.db
+*.lock.db
