@@ -29,6 +29,15 @@
 	<bean id="swaggerConfiguration" class="com.mangofactory.swagger.SwaggerConfiguration">
 	    <property name="basePath"><null /></property>
 	    <property name="apiVersion" value="1.0"/>
+	    <property name="extensions">
+	    	<bean class="com.mangofactory.swagger.SwaggerConfigurationExtension">
+	    		<property name="ignorableParameterTypes">
+	    			<list>
+						<value>org.springframework.web.context.request.WebRequest</value>
+	    			</list>
+	    		</property>
+	    	</bean>
+	    </property>
 	</bean>	
 	
 </beans>
