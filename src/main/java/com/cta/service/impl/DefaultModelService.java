@@ -23,9 +23,9 @@ public class DefaultModelService implements ModelService {
 	}
 	
 	public Class<?> getQualifiedResourceClassName(String resourceName) {
-		ClassPathScanningCandidateComponentProvider tmp = new ClassPathScanningCandidateComponentProvider(false);
-		tmp.addIncludeFilter(new RegexPatternTypeFilter(Pattern.compile("(?i).*[.]" + resourceName + "$")));
-		Set<BeanDefinition> findCandidateComponents = tmp.findCandidateComponents("com.cta.model");
+		ClassPathScanningCandidateComponentProvider classPathScanner = new ClassPathScanningCandidateComponentProvider(false);
+		classPathScanner.addIncludeFilter(new RegexPatternTypeFilter(Pattern.compile("(?i).*[.]" + resourceName + "$")));
+		Set<BeanDefinition> findCandidateComponents = classPathScanner.findCandidateComponents("com.cta.model");
 		
 		if(findCandidateComponents.isEmpty()) {
 			throw new AppException("unknown.resource.name", resourceName);

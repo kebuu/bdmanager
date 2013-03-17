@@ -19,20 +19,21 @@ import com.cta.service.SearchService;
 import com.cta.utils.MyEnumUtils;
 
 @Controller
+@RequestMapping(value="/search")
 public class SearchController {
 
 	protected static final String _OPERATOR_PROPERTY_SUFFIX = "_op_";
 	@Autowired
 	protected SearchService searchService;
 	
-	@RequestMapping(value="/search/{resource}", method=RequestMethod.GET)
+	@RequestMapping(value="/{resource}", method=RequestMethod.GET)
 	@ResponseBody
 	public List<Object> list(@PathVariable("resource") String resourceName, WebRequest request) {
 		List<SearchCriteria> criterias = transformParametersToCriterias(request);
 		return searchService.getResources(resourceName, criterias);
 	}
 	
-	@RequestMapping(value="/search/{resource}/unique", method=RequestMethod.GET)
+	@RequestMapping(value="/{resource}/unique", method=RequestMethod.GET)
 	@ResponseBody
 	public Object unique(@PathVariable("resource") String resourceName, WebRequest request) {
 		List<SearchCriteria> criterias = transformParametersToCriterias(request);

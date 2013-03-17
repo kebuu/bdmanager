@@ -7,11 +7,16 @@
 
 	<import resource="classpath:spring/security-context.xml"/>
 
-	<context:component-scan base-package="com.cta.web.controller"/>
+	<context:component-scan base-package="com.mangofactory.swagger.spring.controller" use-default-filters="false">
+	    <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+	
+	<context:component-scan base-package="com.cta.web.controller" />
 	
 	<mvc:annotation-driven />
 	<mvc:resources location="classpath:/static/image/favicon.ico" mapping="/favicon.ico"/>
 	<mvc:resources location="classpath:/static/" mapping="/static/**"/>
+	<mvc:resources location="classpath:/static/swagger-ui/" mapping="/documentation/**"/>
 	
 	<bean id="exceptionHandler" class="com.cta.web.exception.SimpleHandlerExceptionResolver">
 		<property name="appConfig" ref="appConfig" />
@@ -20,5 +25,10 @@
 	</bean>
 	
 	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver" />
+
+	<bean id="swaggerConfiguration" class="com.mangofactory.swagger.SwaggerConfiguration">
+	    <property name="basePath"><null /></property>
+	    <property name="apiVersion" value="1.0"/>
+	</bean>	
 	
 </beans>

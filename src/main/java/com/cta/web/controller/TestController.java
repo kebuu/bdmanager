@@ -15,9 +15,10 @@ import com.cta.model.Serie;
 
 @Controller
 @Slf4j
+@RequestMapping("/")
 public class TestController {
 
-	@RequestMapping("/echo")
+	@RequestMapping(value="/echo", method=RequestMethod.GET)
 	@ResponseBody
 	public String echo() {
 		return "I'm alive !! ALIVE !!";
@@ -31,7 +32,7 @@ public class TestController {
 		return "I logged some stuff ! See log file";
 	}
 	
-	@RequestMapping("/exception")
+	@RequestMapping(value="/exception", method=RequestMethod.GET)
 	@ResponseBody
 	public String exception() {
 		throw new RuntimeException("Testing exceptin");
