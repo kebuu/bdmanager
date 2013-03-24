@@ -19,7 +19,6 @@ public class DefaultCrudDao extends AbstractDao implements CrudDao {
 		
 		try {
 			getSession().update(resource);
-			getSession().flush();
 		} catch (StaleStateException e) {
 			didUpdateWork = false;
 		}
@@ -31,8 +30,8 @@ public class DefaultCrudDao extends AbstractDao implements CrudDao {
 		boolean didUpdateWork = true;
 		
 		try {
+			getSession().merge(resource);
 			getSession().delete(resource);
-			getSession().flush();
 		} catch (StaleStateException e) {
 			didUpdateWork = false;
 		}

@@ -13,7 +13,12 @@
 	
 	<context:component-scan base-package="com.cta.web.controller" />
 	
-	<mvc:annotation-driven />
+	<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="true">
+			<ref bean="customJackson2MessageConverter" />
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	
 	<mvc:resources location="classpath:/static/image/favicon.ico" mapping="/favicon.ico"/>
 	<mvc:resources location="classpath:/static/" mapping="/static/**"/>
 	<mvc:resources location="classpath:/static/swagger-ui/" mapping="/documentation/**"/>
@@ -26,6 +31,18 @@
 	
 	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver" />
 
+	<bean id="customJackson2MessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+		<property name="objectMapper">
+			<bean class="com.fasterxml.jackson.databind.ObjectMapper">
+				<property name="dateFormat">
+					<bean class="java.text.SimpleDateFormat">
+						<constructor-arg value="${json.default.date.format}" />
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+			
 	<bean id="swaggerConfiguration" class="com.mangofactory.swagger.SwaggerConfiguration">
 	    <property name="basePath"><null /></property>
 	    <property name="apiVersion" value="1.0"/>

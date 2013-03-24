@@ -36,7 +36,7 @@ public class DefaultSearchDao extends AbstractDao implements SearchDao {
 
 			// On verifie que la propriete existe bien sur la classe de recherche et on recupere son type. Si ce n'est pas le cas, le critere est ignore
 			String[] path = propertyName.split("[.]");
-			Class<?> targetPropertyClass = getTargetPropertyClass(resourceClass, path);
+			Class<?> targetPropertyClass = getTargetPropertyClass(resourceClass, path, true);
 			
 			if (targetPropertyClass != null) {
 
@@ -154,21 +154,34 @@ public class DefaultSearchDao extends AbstractDao implements SearchDao {
 
 	/**
 	 * Recupere le type de la propriete ciblee par le path pour la ressource donnee.
+	 * Si le flag checkSuperClass, on verifie si le chemin correspond a une propriete dans les superClass
 	 */
-	private Class<?> getTargetPropertyClass(Class<?> resourceClass, String[] path) {
-		int pathLength = path.length;
+	private Class<?> getTargetPropertyClass(Class<?> resourceClass, String[] path, boolean checkSuperClass) {
+		Class<?> result = null;
 		
-		if(pathLength == 0) {
-			return null;
-		} else if(pathLength == 1) {
-			return getTargetPropertyClass(resourceClass, path[0]);
-		} else {
-			if(getTargetPropertyClass(resourceClass, path[0]) != null) {
-				return getTargetPropertyClass(getNestedResourceClass(resourceClass, path[0]), ArrayUtils.subarray(path, 1, pathLength));
-			} else {
-				return null;
+		// Search path in super class if asked
+		if(checkSuperClass) {
+			Class<?> superclass = resourceClass.getSuperclass();
+			if(superclass != null && !superclass.equals(Object.class)) {
+				result = getTargetPropertyClass(superclass, path, true);
 			}
 		}
+		
+		// Search path in current class if needed
+		if(result == null) {
+			int pathLength = path.length;
+			if(pathLength == 0) {
+				return result;
+			} else if(pathLength == 1) {
+				result = getTargetPropertyClass(resourceClass, path[0]);
+			} else {
+				if(getTargetPropertyClass(resourceClass, path[0]) != null) {
+					result = getTargetPropertyClass(getNestedResourceClass(resourceClass, path[0]), ArrayUtils.subarray(path, 1, pathLength), false);
+				} 
+			}
+		}
+		
+		return result;
 	}
 	
 	private Class<?> getNestedResourceClass(Class<?> resourceClass, String propertyName) {
