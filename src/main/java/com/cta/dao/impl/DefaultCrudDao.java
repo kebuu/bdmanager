@@ -27,16 +27,16 @@ public class DefaultCrudDao extends AbstractDao implements CrudDao {
 
 	@Override
 	public boolean delete(Object resource) {
-		boolean didUpdateWork = true;
+		boolean didDeleteWork = true;
 		
 		try {
 			getSession().merge(resource);
 			getSession().delete(resource);
 		} catch (StaleStateException e) {
-			didUpdateWork = false;
+			didDeleteWork = false;
 		}
 		
-		return didUpdateWork;
+		return didDeleteWork;
 	}
 
 	@Override
