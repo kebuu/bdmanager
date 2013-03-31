@@ -35,5 +35,9 @@ public class SearchControllerTest extends BaseSpringWebTest {
     	this.mockMvc.perform(get("/search/bd?title=Hestia").accept(MediaType.APPLICATION_JSON))
     	.andExpect(status().isOk())
     	.andExpect(jsonPath("$[0].id").value(-6));
+    	
+    	this.mockMvc.perform(get("/search/bd?date=2020-01-01").accept(MediaType.APPLICATION_JSON))
+    	.andExpect(status().isOk())
+    	.andExpect(jsonPath("$[0].id").exists());
     }
 }

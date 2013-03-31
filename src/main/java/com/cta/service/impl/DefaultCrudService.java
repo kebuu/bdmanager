@@ -23,8 +23,8 @@ public class DefaultCrudService implements CrudService {
 	
 	@Override
 	public Object get(String resourceName, Long id) {
-		Class<?> rsourceClazz = modelService.getQualifiedResourceClassName(resourceName);
-		return crudDao.get(rsourceClazz, id);
+		Class<?> resourceClazz = modelService.getQualifiedResourceClassName(resourceName);
+		return crudDao.get(resourceClazz, id);
 	}
 
 	@Override

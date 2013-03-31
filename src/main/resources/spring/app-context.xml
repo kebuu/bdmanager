@@ -9,6 +9,7 @@
 	<!-- CONFIG -->
 	<bean id="appConfig" class="com.cta.config.impl.AppConfigImpl">
 		<property name="debugModeActive" value="${debug.mode.active}" />
+		<property name="dateConverterFormats" value="#{'${search.date.formats}'.split(',')}" />
 	</bean>
 	
 	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
@@ -42,6 +43,21 @@
 	
 	<bean id="crudDao" class="com.cta.dao.impl.DefaultCrudDao" parent="dao" />
 	
-	<bean id="searchDao" class="com.cta.dao.impl.DefaultSearchDao" parent="dao" />
+	<bean id="searchDao" class="com.cta.dao.impl.DefaultSearchDao" parent="dao">
+		<property name="propertyConverter" ref="beanPropertyConverter" />
+	</bean>
+	
+	<!-- MISC -->
+	<bean id="dateConveter" class="com.cta.tools.converter.CustomDateConverter">
+		<property name="appConfig" ref="appConfig" />
+	</bean>
+	
+	<bean id="beanPropertyConverter" class="com.cta.tools.converter.CustomBeanConverter">
+		<property name="customConverters">
+			<map>
+				<entry key="java.util.Date" value-ref="dateConveter" />
+			</map>
+		</property>
+	</bean>
 	
 </beans>

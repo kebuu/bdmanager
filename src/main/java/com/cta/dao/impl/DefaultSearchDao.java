@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import lombok.Setter;
+
 import org.apache.commons.beanutils.ConvertUtilsBean2;
 import org.apache.commons.lang3.ArrayUtils;
 import org.hibernate.Criteria;
@@ -20,9 +22,10 @@ import com.cta.dao.SearchDao;
 import com.cta.dto.search.SearchCriteria;
 import com.cta.exception.TooManyResultsException;
 
+@Setter
 public class DefaultSearchDao extends AbstractDao implements SearchDao {
 
-	protected ConvertUtilsBean2 converter = new ConvertUtilsBean2();
+	protected ConvertUtilsBean2 propertyConverter = new ConvertUtilsBean2();
 	
 	@Override
 	@SuppressWarnings("unchecked")
@@ -103,7 +106,7 @@ public class DefaultSearchDao extends AbstractDao implements SearchDao {
 	 * Convertit la valeur de la propriete, qui est au format String, dans le format cible.
 	 */
 	private Object convertPropertyValue(String propertyValueString, Class<?> targetPropertyClass) {
-		return converter.convert(propertyValueString, targetPropertyClass);
+		return propertyConverter.convert(propertyValueString, targetPropertyClass);
 	}
 
 	/**
