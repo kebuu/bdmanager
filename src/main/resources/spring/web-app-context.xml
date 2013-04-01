@@ -23,13 +23,33 @@
 	<mvc:resources location="classpath:/static/" mapping="/static/**"/>
 	<mvc:resources location="classpath:/static/swagger-ui/" mapping="/documentation/**"/>
 	
-	<bean id="exceptionHandler" class="com.cta.web.exception.SimpleHandlerExceptionResolver">
-		<property name="appConfig" ref="appConfig" />
-		<property name="localResolver" ref="localeResolver" />
-		<property name="messageSource" ref="messageSource" />
+	<bean id="customLocaleChangeInterceptor" class="com.cta.web.interceptor.CustomLocaleChangeInterceptor">
+		<property name="localeResolver" ref="compositeLocaleResolver" />
+		<property name="localeService" ref="localeService" />
 	</bean>
 	
-	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver" />
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<ref bean="customLocaleChangeInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+	<bean id="exceptionHandler" class="com.cta.web.exception.SimpleHandlerExceptionResolver">
+		<property name="appConfig" ref="appConfig" />
+		<property name="messageSource" ref="messageSourceManager" />
+	</bean>
+	
+	<bean id="acceptHeaderLocaleResolver" class="org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver" />
+	<bean id="langParameterLocaleResolver" class="com.cta.web.i18n.LangParameterLocaleResolver" />
+	<bean id="compositeLocaleResolver" class="com.cta.web.i18n.CompositeLocaleResolver" primary="true">
+		<property name="localResolvers">
+			<list>
+				<ref bean="acceptHeaderLocaleResolver"/>
+				<ref bean="langParameterLocaleResolver"/>
+			</list>
+		</property>
+	</bean>
 
 	<bean id="customJackson2MessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
 		<property name="objectMapper">

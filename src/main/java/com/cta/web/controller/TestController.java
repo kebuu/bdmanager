@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,16 +13,26 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 
 import com.cta.model.Serie;
+import com.cta.tools.i18n.ImprovedMessageSource;
 
 @Controller
 @Slf4j
 @RequestMapping("/test")
 public class TestController {
 
+	@Autowired
+	protected ImprovedMessageSource messageSource;
+	
 	@RequestMapping(value="/echo", method=RequestMethod.GET)
 	@ResponseBody
 	public String echo() {
 		return "I'm alive !! ALIVE !!";
+	}
+	
+	@RequestMapping(value="/echo/localized", method=RequestMethod.GET)
+	@ResponseBody
+	public String localizedEcho() {
+		return messageSource.getMessage("test.echo", null);
 	}
 	
 	@RequestMapping(value="/params", method=RequestMethod.POST)
@@ -35,6 +46,6 @@ public class TestController {
 	@RequestMapping(value="/exception", method=RequestMethod.GET)
 	@ResponseBody
 	public String exception() {
-		throw new RuntimeException("Testing exceptin");
+		throw new RuntimeException("Testing exception");
 	}
 }

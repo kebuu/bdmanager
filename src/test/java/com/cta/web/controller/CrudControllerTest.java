@@ -20,17 +20,30 @@ public class CrudControllerTest extends BaseSpringWebTest {
         this.mockMvc.perform(post("/crud/serie").accept(MediaType.APPLICATION_JSON)
           .content(toJson("{'name':'ma serie', 'synopsis': 'syno'}")))
           .andExpect(status().isOk())
-          .andExpect(jsonPath("$.id").value(1));
+          .andExpect(jsonPath("$.data.id").value(1))
+          .andExpect(jsonPath("$.operation").value("CREATE"))
+          .andExpect(jsonPath("$.ok").value(true))
+          ;
         
         this.mockMvc.perform(post("/crud/serie").accept(MediaType.APPLICATION_JSON)
         		.content(toJson("{'name':'ma serie 2'}")))
         		.andExpect(status().isOk())
-        		.andExpect(jsonPath("$.id").value(2));
+        		.andExpect(jsonPath("$.data.id").value(2));
         
         //UPDATE
-        this.mockMvc.perform(put("/crud/serie").accept(MediaType.APPLICATION_JSON)
+        this.mockMvc.perform(put("/crud/serie/1").accept(MediaType.APPLICATION_JSON)
         		.content(toJson("{'name':'ma serie avec un nouveau nom', 'id': 1}")))
-        		.andExpect(status().isOk());
+        		.andExpect(status().isOk())
+        		.andExpect(jsonPath("$.data.id").value(1))
+        		.andExpect(jsonPath("$.operation").value("UPDATE"))
+        		.andExpect(jsonPath("$.ok").value(true))
+        		;
+        
+        this.mockMvc.perform(put("/crud/serie/3").accept(MediaType.APPLICATION_JSON)
+        		.content(toJson("{'name':'ma serie avec un nouveau nom', 'id': 1}")))
+        		.andExpect(status().isOk())
+        		.andExpect(jsonPath("$.code").value("crud.update.id.mismatch"))
+        		;
         
         //READ
         this.mockMvc.perform(get("/crud/serie").accept(MediaType.APPLICATION_JSON))
@@ -46,7 +59,10 @@ public class CrudControllerTest extends BaseSpringWebTest {
         .andExpect(jsonPath("$.id").value(-1));
         
         //DELETE
-        this.mockMvc.perform(delete("/crud/serie/1").accept(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk());
+        this.mockMvc.perform(delete("/crud/serie/2").accept(MediaType.APPLICATION_JSON))
+        		.andExpect(status().isOk())
+        		.andExpect(jsonPath("$.data.id").value(2))
+        		.andExpect(jsonPath("$.operation").value("DELETE"))
+    			.andExpect(jsonPath("$.ok").value(true));
     }
 }

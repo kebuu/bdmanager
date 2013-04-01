@@ -19,8 +19,16 @@
 		<property name="basenames">
 			<list>
 				<value>i18n/exceptions</value>
+				<value>i18n/messages</value>
 			</list>
 		</property>
+	</bean>
+	
+	<!-- I18N -->
+	<bean id="localeService" class="com.cta.tools.i18n.DefaultLocaleService" />
+	<bean id="messageSourceManager" class="com.cta.tools.i18n.MessageSourceManager">
+		<property name="messageSource" ref="messageSource" />
+		<property name="localeService" ref="localeService" />
 	</bean>
 	
 	<!-- SERVICE -->

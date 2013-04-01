@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cta.dto.crud.CrudResult;
+
 @Transactional
 public interface CrudService {
 
@@ -14,16 +16,18 @@ public interface CrudService {
 	 * @param jsonData Les donnees de la ressource au format JSON
 	 * @return L'id de la ressource creee
 	 */
-	Long create(String resourceName, String jsonData);
+	CrudResult create(String resourceName, String jsonData);
 	
 	/**
 	 * Met a jour une ressource a partir du type de la ressource
 	 * et de ses donnees au format JSON
 	 * @param resourceName Le type de ressource a creer
+	 * @param id identifiant de la ressource a mettre a jour. 
+	 * S'il existe un id dans le jsonData, on s'assure qu'il s'agit du meme id.
 	 * @param jsonData Les donnees de la ressource au format JSON
 	 * @return true si la mise a jour s'est deroulee correctement, false notamment si la ressoure n'a pas ete trouvee
 	 */
-	boolean update(String resourceName, String jsonData);
+	CrudResult update(String resourceName, Long id, String jsonData);
 	
 	/**
 	 * Supprime une ressource a partir de son type et de son id
@@ -31,7 +35,7 @@ public interface CrudService {
 	 * @param resourceId L'id de la ressource a supprimer
 	 * @return true si la suppression s'est deroulee correctement, false si la ressoure n'a pas ete trouvee
 	 */
-	boolean delete(String resourceName, Long resourceId);
+	CrudResult delete(String resourceName, Long resourceId);
 	
 	/**
 	 * Recupere la iste de toutes les ressources du type donne

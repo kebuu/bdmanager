@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cta.dto.crud.CrudResult;
+
 @Transactional
 public interface CrudDao {
 	
@@ -12,21 +14,21 @@ public interface CrudDao {
 	 * @param resource La ressource a sauvegarder
 	 * @return L'id de la ressource (interessant surtout si elle a ete generee)
 	 */
-	Long create(Object resource);
+	CrudResult create(Object resource);
 	
 	/**
 	 * Met a jour une ressource. Si la ressource.
 	 * @param resource La ressource a mettre a jour
 	 * @return true si la mise a jour s'est deroulee correctement, false notamment si la ressoure n'a pas ete trouvee
 	 */
-	boolean update(Object resource);
+	CrudResult update(Object resource);
 	
 	/**
 	 * Supprime une ressource.
 	 * @param resource La ressource a supprimer (seule l'attribut id a besoin d'etre renseigne)
 	 * @return true si la suppression s'est deroulee correctement, false si la ressoure n'a pas ete trouvee
 	 */
-	boolean delete(Object resource);
+	CrudResult delete(Object resource);
 	
 	/**
 	 * Recupere la iste de toutes les ressources du type donne

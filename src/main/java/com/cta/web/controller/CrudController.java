@@ -1,8 +1,6 @@
 package com.cta.web.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.cta.dto.crud.CrudResult;
 import com.cta.service.CrudService;
 
 @Controller
@@ -35,21 +34,19 @@ public class CrudController {
 	
 	@RequestMapping(value="/{resource}", method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Long> create(@PathVariable("resource") String resourceName, @RequestBody String requestBody) {
-		Map<String, Long> result = new HashMap<String, Long>();
-		result.put("id", crudService.create(resourceName, requestBody));
-		return result;
+	public CrudResult create(@PathVariable("resource") String resourceName, @RequestBody String requestBody) {
+		return crudService.create(resourceName, requestBody);
 	}
 
-	@RequestMapping(value="/{resource}", method=RequestMethod.PUT)
+	@RequestMapping(value="/{resource}/{id}", method=RequestMethod.PUT)
 	@ResponseBody
-	public boolean update(@PathVariable("resource") String resourceName,  @RequestBody String requestBody) {
-		return crudService.update(resourceName, requestBody);
+	public CrudResult update(@PathVariable("resource") String resourceName, @PathVariable("id") Long id, @RequestBody String requestBody) {
+		return crudService.update(resourceName, id, requestBody);
 	}
 	
 	@RequestMapping(value="/{resource}/{id}", method=RequestMethod.DELETE)
 	@ResponseBody
-	public boolean delete(@PathVariable("resource") String resourceName, @PathVariable("id") Long id) {
+	public CrudResult delete(@PathVariable("resource") String resourceName, @PathVariable("id") Long id) {
 		return crudService.delete(resourceName, id);
 	}
 }

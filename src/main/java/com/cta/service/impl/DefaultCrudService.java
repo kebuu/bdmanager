@@ -5,6 +5,9 @@ import java.util.List;
 import lombok.Setter;
 
 import com.cta.dao.CrudDao;
+import com.cta.dto.crud.CrudResult;
+import com.cta.exception.AppException;
+import com.cta.model.Model;
 import com.cta.service.CrudService;
 import com.cta.service.ModelService;
 
@@ -28,19 +31,23 @@ public class DefaultCrudService implements CrudService {
 	}
 
 	@Override
-	public Long create(String resourceName, String jsonData) {
+	public CrudResult create(String resourceName, String jsonData) {
 		Object resource = modelService.getResource(resourceName, jsonData);
 		return crudDao.create(resource);
 	}
 
 	@Override
-	public boolean update(String resourceName, String jsonData) {
-		Object resource = modelService.getResource(resourceName, jsonData);
+	public CrudResult update(String resourceName, Long id, String jsonData) {
+		Model resource = (Model) modelService.getResource(resourceName, jsonData);
+		
+		if(id != null && resource.getId() != null && !id.equals(resource.getId())) {
+			throw new AppException("crud.update.id.mismatch");
+		}
 		return crudDao.update(resource);
 	}
 
 	@Override
-	public boolean delete(String resourceName, Long resourceId) {
+	public CrudResult delete(String resourceName, Long resourceId) {
 		Object resource = modelService.getResource(resourceName, "{\"id\":" + resourceId + "}");
 		return crudDao.delete(resource);
 	}
