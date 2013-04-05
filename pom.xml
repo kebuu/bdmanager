@@ -120,6 +120,11 @@
 		</profile>
 	</profiles>
 	<dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${spring.version}</version>
+        </dependency>	
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
@@ -286,6 +291,6 @@
 		    		<groupId>org.slf4j</groupId>
 		    	</exclusion>
 		    </exclusions>
-		</dependency>		
+		</dependency>
 	</dependencies>
 </project>

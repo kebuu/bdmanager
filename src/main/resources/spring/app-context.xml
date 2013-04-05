@@ -4,6 +4,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<import resource="classpath:spring/db-context.xml"/>
+	<import resource="classpath:spring/cache-context.xml"/>
 	<import resource="classpath:spring/hibernate-context.xml"/>
 
 	<!-- CONFIG -->
