@@ -1,4 +1,4 @@
-package com.cta;
+package com.cta.dao;
 
 
 import static org.junit.Assert.assertEquals;
@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cta.BaseSpringTest;
 import com.cta.model.Bd;
 import com.cta.model.Serie;
 import com.cta.utils.MyListUtils;
