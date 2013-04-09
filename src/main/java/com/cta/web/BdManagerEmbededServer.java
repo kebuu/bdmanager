@@ -15,6 +15,8 @@ import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
+import com.google.common.collect.ImmutableList;
+
 
 @Slf4j
 @SuppressWarnings("static-access")
@@ -32,12 +34,13 @@ public abstract class BdManagerEmbededServer extends AbstractMain {
 	}
 		
 	public static void main(String[] args) {
+		log.info("Starting with args : " + ImmutableList.copyOf(args));
 		CommandLine cmd = parseCommandLine(args);
 		
 		if(cmd.hasOption('h')) {
 			displayUsage("BdManagerEmbededServer");
 		} else {
-			int port = getOptionValueInt(cmd, "p", 8090);
+			int port = getOptionValueInt(cmd, "p", System.getProperty("app.port") == null ? 8090 : Integer.parseInt(System.getProperty("app.port"))); // Hack cloudbees
 			String contextPath = getOptionValueString(cmd, "c", "/");
 			
 			log.info("Starting on port : " + port);
