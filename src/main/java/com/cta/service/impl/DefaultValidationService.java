@@ -29,18 +29,23 @@ public class DefaultValidationService implements ValidationService {
 		return result;
 	}
 
-	private List<Validator> getApplicableValidators(final Object data, List<Validator> validators) {
+	protected List<Validator> getApplicableValidators(final Object data, List<Validator> validators) {
 		List<Validator> applicableValidators = Lists.newArrayList(validators);
 		
 		CollectionUtils.filter(applicableValidators, new Predicate<Validator>() {
 
 			@Override
 			public boolean evaluate(Validator validator) {
-				return validator.canValidate(data.getClass());
+				return canUseValidatorForData(data, validator);
 			}
 
 		});
 
 		return applicableValidators;
 	}
+	
+   protected boolean canUseValidatorForData(final Object data, Validator validator) {
+        return data.getClass().isAssignableFrom(validator.getValidatedClass());
+    }
+	
 }

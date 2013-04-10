@@ -8,6 +8,6 @@ import lombok.Data;
 @Data
 public class ValidationResult {
 
-	protected boolean ok;
+	protected boolean ok = true;
 	protected Map<String, List<String>> errorMessagesByProperty;
 }
