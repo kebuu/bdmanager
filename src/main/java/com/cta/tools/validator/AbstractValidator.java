@@ -4,10 +4,13 @@ import lombok.Setter;
 
 import org.hibernate.SessionFactory;
 
+import com.cta.tools.i18n.MessageSourceManager;
+
 @Setter
 public abstract class AbstractValidator implements Validator {
 
 	protected SessionFactory sessionFactory;
+	protected MessageSourceManager messageSource;
 	
 	@SuppressWarnings("unchecked")
     protected <T> T cast(Object data, Class<T> clazz) {
