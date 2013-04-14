@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="hibernateSessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="datasource" />
+		<property name="namingStrategy" ref="namingStrategy" />
+		<property name="hibernateProperties">
+			<value>
+				hibernate.format_sql=${debug.sql:true}
+				hibernate.show_sql=${debug.sql:true}
+				hibernate.connection.autocommit=false
+				hibernate.default_schema=${datasource.schema}
+				hibernate.dialect=${hibernate.dialect}
+				hibernate.jdbc.batch_size=20
+				hibernate.hbm2ddl.auto=${hibernate.hbm2ddl:validate}
+			</value>
+		</property>
+		<property name="packagesToScan">
+			<array>
+				<value>com.cta.model</value>
+			</array>
+		</property>
+	</bean>
+	
+	<bean id="txManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="hibernateSessionFactory" />
+	</bean>
+	
+	<bean id="namingStrategy" class="org.hibernate.cfg.ImprovedNamingStrategy" />
+
+</beans>

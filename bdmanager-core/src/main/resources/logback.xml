@@ -1,0 +1,36 @@
+<configuration>
+
+	<!-- To enable JMX Management -->
+	<jmxConfigurator />
+
+	<property name="pattern.layout" value="%date{dd-MMM HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n%rEx{short}" />
+
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${log.folder:-.}/bdmanager.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log.folder:-.}/bdmanager.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<maxHistory>10</maxHistory>
+		</rollingPolicy>
+
+		<encoder>
+			<pattern>${pattern.layout}</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>${pattern.layout}</pattern>
+		</encoder>
+	</appender>
+
+	<logger name="com.cta" level="${log.level:-INFO}" />
+	<logger name="org.hibernate" level="warn" />
+	<logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="trace" />
+	<logger name="org.springframework" level="warn" />
+	<logger name="com.mangofactory" level="error" />
+
+	<root level="INFO">
+		<appender-ref ref="FILE" />
+		<appender-ref ref="STDOUT" />
+	</root>
+</configuration>

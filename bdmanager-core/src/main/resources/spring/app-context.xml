@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<import resource="classpath:spring/db-context.xml"/>
+	<import resource="classpath:spring/cache-context.xml"/>
+	<import resource="classpath:spring/hibernate-context.xml"/>
+
+	<!-- CONFIG -->
+	<bean id="appConfig" class="com.cta.config.impl.AppConfigImpl">
+		<property name="debugModeActive" value="${debug.mode.active}" />
+		<property name="dateConverterFormats" value="#{'${search.date.formats}'.split(',')}" />
+	</bean>
+	
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="fallbackToSystemLocale" value="false" />
+		<property name="defaultEncoding" value="UTF-8" />
+		<property name="useCodeAsDefaultMessage" value="true" />
+		<property name="basenames">
+			<list>
+				<value>i18n/exceptions</value>
+				<value>i18n/messages</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- I18N -->
+	<bean id="localeService" class="com.cta.tools.i18n.DefaultLocaleService" />
+	<bean id="messageSourceManager" class="com.cta.tools.i18n.MessageSourceManager">
+		<property name="messageSource" ref="messageSource" />
+		<property name="localeService" ref="localeService" />
+	</bean>
+
+	<!-- SERVICE -->
+	<bean id="validationService" class="com.cta.service.impl.DefaultValidationService">
+		<property name="validators">
+			<list>
+				<ref bean="serieValidator"/>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="modelService" class="com.cta.service.impl.DefaultModelService" />
+	
+	<bean id="crudService" class="com.cta.service.impl.DefaultCrudService">
+		<property name="crudDao" ref="crudDao" />
+		<property name="modelService" ref="modelService" />
+		<property name="validationService" ref="validationService" />
+	</bean>
+	
+	<bean id="searchService" class="com.cta.service.impl.DefaultSearchService">
+		<property name="searchDao" ref="searchDao" />
+		<property name="modelService" ref="modelService" />
+	</bean>
+	
+	<!-- DAO -->
+	<bean id="dao" abstract="true">
+		<property name="sessionFactory" ref="hibernateSessionFactory"/>
+	</bean>
+	
+	<bean id="crudDao" class="com.cta.dao.impl.DefaultCrudDao" parent="dao" />
+	
+	<bean id="searchDao" class="com.cta.dao.impl.DefaultSearchDao" parent="dao">
+		<property name="propertyConverter" ref="beanPropertyConverter" />
+	</bean>
+
+	<!-- VALIDATOR -->
+	<bean id="serieValidator" class="com.cta.tools.validator.SerieValidator">
+		<property name="sessionFactory" ref="hibernateSessionFactory" />
+		<property name="messageSource" ref="messageSourceManager" />
+	</bean>
+		
+	<!-- MISC -->
+	<bean id="dateConveter" class="com.cta.tools.converter.CustomDateConverter">
+		<property name="appConfig" ref="appConfig" />
+	</bean>
+	
+	<bean id="beanPropertyConverter" class="com.cta.tools.converter.CustomBeanConverter">
+		<property name="customConverters">
+			<map>
+				<entry key="java.util.Date" value-ref="dateConveter" />
+			</map>
+		</property>
+	</bean>
+	
+</beans>
