@@ -16,6 +16,7 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import com.cta.config.AppConfig;
 import com.cta.exception.AppException;
+import com.cta.exception.ValidationServiceException;
 import com.cta.tools.i18n.ImprovedMessageSource;
 
 @Setter
@@ -31,12 +32,21 @@ public class SimpleHandlerExceptionResolver implements HandlerExceptionResolver 
         view.setExtractValueFromSingleKeyModel(true);
         Map<String,Object> model = new HashMap<String,Object>();
         ExceptionInfo exceptionInfo = getExceptionInfo(ex, appConfig.isDebugModeActive());
+        response.setStatus(getStatus(ex));
 		model.put("error", exceptionInfo);
         log.error(exceptionInfo.toString());
         return new ModelAndView(view, model);
     }
     
-   protected ExceptionInfo getExceptionInfo(Exception ex, boolean isDebugModeActive) {
+   private int getStatus(Exception ex) {
+		if(ex instanceof AppException) {
+			return HttpServletResponse.SC_BAD_REQUEST;
+		} else {
+			return HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+		}
+	}
+
+protected ExceptionInfo getExceptionInfo(Exception ex, boolean isDebugModeActive) {
 	   String exceptionCode = AppException.DEFAULT_EXCEPTION_CODE;
 	   Object[] exceptionMessageArguments = ArrayUtils.EMPTY_OBJECT_ARRAY;
 	   
@@ -44,13 +54,16 @@ public class SimpleHandlerExceptionResolver implements HandlerExceptionResolver 
 		   exceptionCode = ((AppException) ex).getCode();
 		   exceptionMessageArguments = ((AppException) ex).getArguments();
        } 
-	   
 	   String exceptionMessage = messageSource.getMessage(exceptionCode, exceptionMessageArguments);
 	   
-	   if(isDebugModeActive) {
-		   return new DetailedExceptionInfo(exceptionCode, exceptionMessage, ex);
+	   if(ex instanceof ValidationServiceException) {
+		   return new ValidationServiceExceptionInfo(exceptionCode, exceptionMessage, ((ValidationServiceException) ex).getValidationResult());
 	   } else {
-		   return new ExceptionInfo(exceptionCode, exceptionMessage);
+		   if(isDebugModeActive) {
+			   return new DetailedExceptionInfo(exceptionCode, exceptionMessage, ex);
+		   } else {
+			   return new ExceptionInfo(exceptionCode, exceptionMessage);
+		   }
 	   }
    }
 }

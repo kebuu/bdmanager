@@ -10,6 +10,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.Test;
 import org.springframework.http.MediaType;
 
+import com.cta.exception.ValidationServiceException;
+
 
 public class CrudControllerTest extends BaseSpringWebTest {
 
@@ -30,6 +32,13 @@ public class CrudControllerTest extends BaseSpringWebTest {
         		.andExpect(status().isOk())
         		.andExpect(jsonPath("$.data.id").value(2));
         
+        //CREATE WITH VALIDATION ERROR
+        this.mockMvc.perform(post("/crud/serie").accept(MediaType.APPLICATION_JSON)
+        		.content(toJson("{'name':'ma Serie', 'synopsis': 'syno'}")))
+        		.andExpect(status().isBadRequest())
+        		.andExpect(jsonPath("$.code").value(ValidationServiceException.DEFAULT_VALIDATION_EXCEPTION_CODE))
+        		;
+        
         //UPDATE
         this.mockMvc.perform(put("/crud/serie/1").accept(MediaType.APPLICATION_JSON)
         		.content(toJson("{'name':'ma serie avec un nouveau nom', 'id': 1}")))
@@ -39,9 +48,10 @@ public class CrudControllerTest extends BaseSpringWebTest {
         		.andExpect(jsonPath("$.ok").value(true))
         		;
         
+        //UPDATE WITH ID MISMATCH
         this.mockMvc.perform(put("/crud/serie/3").accept(MediaType.APPLICATION_JSON)
         		.content(toJson("{'name':'ma serie avec un nouveau nom', 'id': 1}")))
-        		.andExpect(status().isOk())
+        		.andExpect(status().isBadRequest())
         		.andExpect(jsonPath("$.code").value("crud.update.id.mismatch"))
         		;
         

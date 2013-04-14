@@ -31,13 +31,22 @@
 		<property name="messageSource" ref="messageSource" />
 		<property name="localeService" ref="localeService" />
 	</bean>
-	
+
 	<!-- SERVICE -->
+	<bean id="validationService" class="com.cta.service.impl.DefaultValidationService">
+		<property name="validators">
+			<list>
+				<ref bean="serieValidator"/>
+			</list>
+		</property>
+	</bean>
+	
 	<bean id="modelService" class="com.cta.service.impl.DefaultModelService" />
 	
 	<bean id="crudService" class="com.cta.service.impl.DefaultCrudService">
 		<property name="crudDao" ref="crudDao" />
 		<property name="modelService" ref="modelService" />
+		<property name="validationService" ref="validationService" />
 	</bean>
 	
 	<bean id="searchService" class="com.cta.service.impl.DefaultSearchService">
@@ -55,7 +64,13 @@
 	<bean id="searchDao" class="com.cta.dao.impl.DefaultSearchDao" parent="dao">
 		<property name="propertyConverter" ref="beanPropertyConverter" />
 	</bean>
-	
+
+	<!-- VALIDATOR -->
+	<bean id="serieValidator" class="com.cta.tools.validator.SerieValidator">
+		<property name="sessionFactory" ref="hibernateSessionFactory" />
+		<property name="messageSource" ref="messageSourceManager" />
+	</bean>
+		
 	<!-- MISC -->
 	<bean id="dateConveter" class="com.cta.tools.converter.CustomDateConverter">
 		<property name="appConfig" ref="appConfig" />

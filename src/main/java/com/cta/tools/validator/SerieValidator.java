@@ -13,15 +13,16 @@ public class SerieValidator extends AbstractValidator {
 	public ValidationResult validate(Object data) {
 	    ValidationResult result = ValidationResult.ok();
 	    
+	    // Validate name uniqueness
 		Serie serie = cast(data, Serie.class);
 		Session currentSession = sessionFactory.getCurrentSession();
 		Serie existingSerie = (Serie) currentSession.createCriteria(Serie.class)
-		        .add(Restrictions.eq("name", serie).ignoreCase())
+		        .add(Restrictions.eq("name", serie.getName()).ignoreCase())
 		        .createCriteria("bds", JoinType.NONE)
 		        .uniqueResult();
 		
 		if(existingSerie != null && !serie.equals(existingSerie)) {
-		    result.addError("name", messageSource.getMessage("", null));
+		    result.addError("name", messageSource.getMessage("duplicate.serie.name", null));
 		}
 		
 		return result;

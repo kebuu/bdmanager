@@ -23,7 +23,11 @@ public class DefaultValidationService implements ValidationService {
 
 		List<Validator> applicableValidators = getApplicableValidators(data, validators);
 		for (Validator validator : applicableValidators) {
-			validator.validate(data);
+			ValidationResult validateResult = validator.validate(data);
+			
+			if(!validateResult.isOk()) {
+				result.addErrors(validateResult.getErrorMessagesByProperty());
+			}
 		}
 
 		return result;
