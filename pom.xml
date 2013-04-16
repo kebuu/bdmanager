@@ -10,6 +10,7 @@
 		<module>bdmanager-core</module>
 		<module>bdmanager-standalone</module>
 		<module>bdmanager-webapp</module>
+		<module>bdmanager-batch</module>
 	</modules>
 	
 	<properties>
