@@ -5,7 +5,7 @@
 
 	<!-- INFRASTRUCTURE -->
 	<bean id="jobRepository" class="org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean">
-		<property name="transactionManager-ref" ref="transactionManager" />
+		<property name="transactionManager" ref="transactionManager" />
 	</bean>
 
 	<bean id="transactionManager" class="org.springframework.batch.support.transaction.ResourcelessTransactionManager" />
