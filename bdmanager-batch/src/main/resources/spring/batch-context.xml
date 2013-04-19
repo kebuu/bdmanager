@@ -24,7 +24,7 @@
 	<batch:job id="fillSerieAndBdFromCsv" job-repository="jobRepository">
 		<batch:step id="readWriteFromCsv">
 			<batch:tasklet transaction-manager="transactionManage">
-				<batch:chunk commit-interval="50"  reader="" writer="" processor=""></batch:chunk>
+				<batch:chunk reader="mesBdReaderCsv" writer="" />
 			</batch:tasklet>
 		</batch:step>
 	</batch:job>
@@ -34,6 +34,29 @@
 
 	<!-- READER -->
 	<bean id="mesBdReaderCsv" class="org.springframework.batch.item.file.FlatFileItemReader">
-	
+	   <property name="linesToSkip" value="1" />
+	   <property name="comments" value="'#{{'#'}}'" />
+	   <property name="resource" value="src/main/resources/data/MesBds.csv" />
+	   <property name="lineMapper" value="csvToSerieMapper" />
 	</bean>
+	
+	<bean id="csvToSerieMapper" class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+	   <property name="lineTokenizer">
+	       <bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
+			   <property name="delimiter" value="," />
+	           <property name="names" value="serie,tome,titre,sousTitre,auteurs,editeurs" />
+	       </bean>
+	   </property>
+	   <property name="fieldSetMapper">
+	       <bean class="org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper">
+	           <property name="targetType" value="com.cta.batch.model.BdFromCsv" />
+	           <property name="distanceLimit" value="0" />
+	       </bean>
+	   </property>
+	</bean>
+	
+	<!-- WRITER -->
+	<bean id="mesBdWriterToDatabase" class="">
+	</bean>
+	
 </beans>

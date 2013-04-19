@@ -1,4 +1,4 @@
-package com.cta.launcher;
+package com.cta.batch.launcher;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
