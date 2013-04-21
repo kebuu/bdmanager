@@ -10,7 +10,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.cta.BaseSpringTest;
+import com.cta.test.BaseSpringTest;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)

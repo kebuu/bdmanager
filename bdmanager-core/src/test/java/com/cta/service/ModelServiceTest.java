@@ -9,10 +9,10 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.support.SimpleValueWrapper;
 
-import com.cta.BaseSpringTest;
 import com.cta.exception.AppException;
 import com.cta.model.Serie;
 import com.cta.service.impl.DefaultModelService;
+import com.cta.test.BaseSpringTest;
 
 public class ModelServiceTest extends BaseSpringTest {
 

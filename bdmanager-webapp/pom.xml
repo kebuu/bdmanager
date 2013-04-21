@@ -34,7 +34,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.cta</groupId>
-			<artifactId>bdmanager-core</artifactId>
+			<artifactId>bdmanager-web</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

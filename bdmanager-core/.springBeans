@@ -11,8 +11,6 @@
 		<config>src/main/resources/spring/db-context.xml</config>
 		<config>src/main/resources/spring/app-context.xml</config>
 		<config>src/main/resources/spring/main-context.xml</config>
-		<config>src/main/resources/spring/security-context.xml</config>
-		<config>src/main/resources/spring/web-app-context.xml</config>
 	</configs>
 	<configSets>
 		<configSet>
@@ -24,7 +22,6 @@
 				<config>src/main/resources/spring/hibernate-context.xml</config>
 				<config>src/main/resources/spring/app-context.xml</config>
 				<config>src/main/resources/spring/main-context.xml</config>
-				<config>src/main/resources/spring/web-app-context.xml</config>
 			</configs>
 			<profiles>
 			</profiles>

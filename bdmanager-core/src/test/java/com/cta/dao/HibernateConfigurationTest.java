@@ -14,9 +14,9 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.cta.BaseSpringTest;
 import com.cta.model.Bd;
 import com.cta.model.Serie;
+import com.cta.test.BaseSpringTest;
 import com.cta.utils.MyListUtils;
 import com.cta.utils.MyObjectUtils;
 

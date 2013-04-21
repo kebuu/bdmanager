@@ -12,10 +12,16 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class TestBatch {
 
-    public static void main(String[] args) throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException {
-        ApplicationContext context = new ClassPathXmlApplicationContext("spring/batch-context.xml");
-        JobLauncher jobLauncher = (JobLauncher) context.getBean("jobLauncher", JobLauncher.class);
-        Job job = (Job) context.getBean("helloWorldJob", Job.class);
-        jobLauncher.run(job, new JobParameters());
-    }
+	public static void main(String[] args) throws JobExecutionAlreadyRunningException, JobRestartException,
+			JobInstanceAlreadyCompleteException, JobParametersInvalidException {
+		ApplicationContext context = new ClassPathXmlApplicationContext("spring/batch-context.xml");
+		JobLauncher jobLauncher = (JobLauncher) context.getBean("jobLauncher", JobLauncher.class);
+
+		// Simple HelloWorld
+		Job job = (Job) context.getBean("helloWorldJob", Job.class);
+		jobLauncher.run(job, new JobParameters());
+
+		job = (Job) context.getBean("fillSerieAndBdFromCsv", Job.class);
+		jobLauncher.run(job, new JobParameters());
+	}
 }

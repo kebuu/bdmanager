@@ -1,4 +1,4 @@
-package com.cta;
+package com.cta.test;
 
 import javax.sql.DataSource;
 
