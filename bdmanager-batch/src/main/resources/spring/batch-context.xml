@@ -22,16 +22,16 @@
 	</batch:job>
 
 	<batch:job id="fillSerieAndBdFromCsv" job-repository="jobRepository">
-		<batch:step id="readWriteSerieFromCsv" next="readWriteBdFromCsv">
+		<batch:step id="readWriteSerieFromCsv">
 			<batch:tasklet transaction-manager="transactionManager">
 				<batch:chunk commit-interval="1000" reader="mesBdReaderCsv" writer="mesBdWriterSerieToDatabase" />
 			</batch:tasklet>
 		</batch:step>
-		<batch:step id="readWriteBdFromCsv">
-			<batch:tasklet transaction-manager="transactionManager">
-				<batch:chunk commit-interval="1000" reader="mesBdReaderCsv" writer="mesBdWriterBdToDatabase" />
-			</batch:tasklet>
-		</batch:step>
+<!-- 		<batch:step id="readWriteBdFromCsv"> -->
+<!-- 			<batch:tasklet transaction-manager="transactionManager"> -->
+<!-- 				<batch:chunk commit-interval="1000" reader="mesBdReaderCsv" writer="mesBdWriterBdToDatabase" /> -->
+<!-- 			</batch:tasklet> -->
+<!-- 		</batch:step> -->
 	</batch:job>
 
 	<!-- TASKLET -->
@@ -41,7 +41,7 @@
 	<bean id="mesBdReaderCsv" class="org.springframework.batch.item.file.FlatFileItemReader">
 		<property name="linesToSkip" value="1" />
 		<property name="comments" value="'#{{'#'}}'" />
-		<property name="resource" value="data/MesBds.csv" />
+		<property name="resource" value="data/MesBDs.csv" />
 		<property name="lineMapper" ref="csvToBdMapper" />
 	</bean>
 
@@ -62,14 +62,12 @@
 
 	<!-- WRITER -->
 	<bean id="hibernateBaseItemWriter" abstract="true">
-		<property name="hibernateTemplate" ref="hibernateTemplate" />
+        <property name="sessionFactory" ref="hibernateSessionFactory" />
 	</bean>
+
+	<bean id="mesBdWriterSerieToDatabase" class="com.cta.batch.writer.SerieWriter" parent="hibernateBaseItemWriter" />
 	
-	<bean id="mesBdWriterSerieToDatabase" class="com.cta.batch.FakeBdWriter">
-	</bean>
-	
-	<bean id="mesBdWriterBdToDatabase" class="com.cta.batch.FakeBdWriter">
-	</bean>
+	<bean id="mesBdWriterBdToDatabase" class="com.cta.batch.writer.SimpleLoggerWriter"></bean>
 
 
 </beans>

@@ -10,7 +10,7 @@ import org.springframework.batch.item.ItemWriter;
  * Writer for testing purpose
  */
 @Slf4j
-public class LogWriter implements ItemWriter<Object> {
+public class SimpleLoggerWriter implements ItemWriter<Object> {
 
 	@Override
 	public void write(List<? extends Object> items) throws Exception {

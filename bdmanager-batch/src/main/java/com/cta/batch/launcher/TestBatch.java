@@ -14,7 +14,7 @@ public class TestBatch {
 
 	public static void main(String[] args) throws JobExecutionAlreadyRunningException, JobRestartException,
 			JobInstanceAlreadyCompleteException, JobParametersInvalidException {
-		ApplicationContext context = new ClassPathXmlApplicationContext("spring/batch-context.xml");
+		ApplicationContext context = new ClassPathXmlApplicationContext("spring/main-context.xml", "spring/batch-context.xml");
 		JobLauncher jobLauncher = (JobLauncher) context.getBean("jobLauncher", JobLauncher.class);
 
 		// Simple HelloWorld
