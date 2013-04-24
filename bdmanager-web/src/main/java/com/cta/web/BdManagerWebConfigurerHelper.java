@@ -17,7 +17,7 @@ public abstract class BdManagerWebConfigurerHelper {
 	public static XmlWebApplicationContext configureSpringContext(ServletContext servletContext) {
 		final XmlWebApplicationContext applicationContext = new XmlWebApplicationContext();
 		applicationContext.setServletContext(servletContext);
-		applicationContext.setConfigLocation("classpath:spring/web-main-context.xml");
+		applicationContext.setConfigLocations(new String[] {"classpath:spring/web-main-context.xml"});
 		applicationContext.refresh();
 		applicationContext.registerShutdownHook();
 		return applicationContext;

@@ -13,7 +13,7 @@
 	<bean id="jobLauncher" class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
 		<property name="jobRepository" ref="jobRepository" />
 	</bean>
-
+	
 	<!-- JOB -->
 	<batch:job id="helloWorldJob" job-repository="jobRepository">
 		<batch:step id="hello">
@@ -22,9 +22,14 @@
 	</batch:job>
 
 	<batch:job id="fillSerieAndBdFromCsv" job-repository="jobRepository">
-		<batch:step id="readWriteFromCsv">
+		<batch:step id="readWriteSerieFromCsv" next="readWriteBdFromCsv">
 			<batch:tasklet transaction-manager="transactionManager">
-				<batch:chunk commit-interval="1000" reader="mesBdReaderCsv" writer="mesBdWriterToDatabase" />
+				<batch:chunk commit-interval="1000" reader="mesBdReaderCsv" writer="mesBdWriterSerieToDatabase" />
+			</batch:tasklet>
+		</batch:step>
+		<batch:step id="readWriteBdFromCsv">
+			<batch:tasklet transaction-manager="transactionManager">
+				<batch:chunk commit-interval="1000" reader="mesBdReaderCsv" writer="mesBdWriterBdToDatabase" />
 			</batch:tasklet>
 		</batch:step>
 	</batch:job>
@@ -37,10 +42,10 @@
 		<property name="linesToSkip" value="1" />
 		<property name="comments" value="'#{{'#'}}'" />
 		<property name="resource" value="data/MesBds.csv" />
-		<property name="lineMapper" ref="csvToSerieMapper" />
+		<property name="lineMapper" ref="csvToBdMapper" />
 	</bean>
 
-	<bean id="csvToSerieMapper" class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+	<bean id="csvToBdMapper" class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
 		<property name="lineTokenizer">
 			<bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
 				<property name="delimiter" value="," />
@@ -56,10 +61,15 @@
 	</bean>
 
 	<!-- WRITER -->
-	<bean id="mesBdWriterToDatabase" class="com.cta.batch.FakeBdWriter">
-	</bean>
-
-	<bean id="productItemWriter" class="org.springframework.batch.item.database.HibernateItemWriter">
+	<bean id="hibernateBaseItemWriter" abstract="true">
 		<property name="hibernateTemplate" ref="hibernateTemplate" />
 	</bean>
+	
+	<bean id="mesBdWriterSerieToDatabase" class="com.cta.batch.FakeBdWriter">
+	</bean>
+	
+	<bean id="mesBdWriterBdToDatabase" class="com.cta.batch.FakeBdWriter">
+	</bean>
+
+
 </beans>
