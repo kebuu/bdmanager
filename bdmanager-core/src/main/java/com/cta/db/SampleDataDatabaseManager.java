@@ -15,6 +15,8 @@ import org.apache.commons.io.Charsets;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
@@ -29,9 +31,29 @@ public class SampleDataDatabaseManager implements InitializingBean {
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		if (loadSampleData) {
-			log.info("Loading sample data");
-			loadSampleData();
+			if(sampleDataAlreadyLoaded()) {
+				log.info("/!\\ Sample data seem already loaded");
+			} else {
+				log.info("Loading sample data");
+				loadSampleData();
+			}
 		}
+	}
+
+	private boolean sampleDataAlreadyLoaded() {
+		boolean result = false;
+		
+		try {
+			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+			int numberOfSerieWithIdEqualsToMinusOne = jdbcTemplate.queryForInt("SELECT count(*) FROM serie WHERE id = -1");
+			if(numberOfSerieWithIdEqualsToMinusOne > 0) {
+				result = true;
+			}
+		} catch (DataAccessException e) {
+			// Nothing to do this certainly means the table 'serie' does not exist
+		}
+		
+		return result;
 	}
 
 	/**
@@ -52,7 +74,7 @@ public class SampleDataDatabaseManager implements InitializingBean {
 			}
 
 			DatabasePopulatorUtils.execute(pop, dataSource);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			log.warn("Cannot load sample data", e);
 		}
 	}

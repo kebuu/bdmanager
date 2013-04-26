@@ -35,7 +35,7 @@
 		</mvc:interceptor>
 	</mvc:interceptors>
 
-	<bean id="exceptionHandler" class="com.cta.web.exception.SimpleHandlerExceptionResolver">
+	<bean id="exceptionHandler2" class="com.cta.web.exception.RestResponseEntityExceptionHandler">
 		<property name="appConfig" ref="appConfig" />
 		<property name="messageSource" ref="messageSourceManager" />
 	</bean>

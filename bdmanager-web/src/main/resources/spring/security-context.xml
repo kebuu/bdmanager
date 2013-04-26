@@ -13,7 +13,7 @@
 	</security:authentication-manager>
 
 	<beans profile="secure">
-		<security:http>
+		<security:http create-session="stateless">
 			<security:anonymous enabled="true" />
 			<security:form-login />
 			<security:access-denied-handler error-page="/static/html/forbidden.html" />
@@ -21,8 +21,9 @@
 			<security:intercept-url pattern="/static/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 			<security:intercept-url pattern="/crud/**" access="ROLE_ADMIN" />
 			<security:intercept-url pattern="/**" access="ROLE_USER" />
+			<security:remember-me key="bdmanager-spring-security" />
+			<security:logout delete-cookies="JSESSIONID" />
 		</security:http>
-
 	</beans>
 
 	<beans profile="!secure">

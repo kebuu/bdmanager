@@ -1,8 +1,5 @@
 package com.cta.web.exception;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -10,46 +7,41 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.springframework.web.servlet.HandlerExceptionResolver;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.cta.config.AppConfig;
 import com.cta.exception.AppException;
 import com.cta.exception.ValidationServiceException;
 import com.cta.tools.i18n.ImprovedMessageSource;
 
-/**
- * @deprecated You should consider using {@link RestResponseEntityExceptionHandler} instead.
- */
+@ControllerAdvice
 @Setter
 @Slf4j
-public class SimpleHandlerExceptionResolver implements HandlerExceptionResolver {
-
+public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
+ 
 	protected AppConfig appConfig;
 	protected ImprovedMessageSource messageSource;
 	
-    @Override
-    public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
-    	MappingJackson2JsonView view = new MappingJackson2JsonView();
-        view.setExtractValueFromSingleKeyModel(true);
-        Map<String,Object> model = new HashMap<String,Object>();
+    @ExceptionHandler
+    public ResponseEntity<ExceptionInfo> resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         ExceptionInfo exceptionInfo = getExceptionInfo(ex, appConfig.isDebugModeActive());
-        response.setStatus(getStatus(ex));
-		model.put("error", exceptionInfo);
         log.error(exceptionInfo.toString());
-        return new ModelAndView(view, model);
+        return new ResponseEntity<>(exceptionInfo, getStatus(ex));
     }
     
-   private int getStatus(Exception ex) {
+   private HttpStatus getStatus(Exception ex) {
 		if(ex instanceof AppException) {
-			return HttpServletResponse.SC_BAD_REQUEST;
+			return HttpStatus.BAD_REQUEST;
 		} else {
-			return HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+			return HttpStatus.INTERNAL_SERVER_ERROR;
 		}
 	}
 
-protected ExceptionInfo getExceptionInfo(Exception ex, boolean isDebugModeActive) {
+   protected ExceptionInfo getExceptionInfo(Exception ex, boolean isDebugModeActive) {
 	   String exceptionCode = AppException.DEFAULT_EXCEPTION_CODE;
 	   Object[] exceptionMessageArguments = ArrayUtils.EMPTY_OBJECT_ARRAY;
 	   
@@ -68,5 +60,5 @@ protected ExceptionInfo getExceptionInfo(Exception ex, boolean isDebugModeActive
 			   return new ExceptionInfo(exceptionCode, exceptionMessage);
 		   }
 	   }
-   }
+   }    
 }
