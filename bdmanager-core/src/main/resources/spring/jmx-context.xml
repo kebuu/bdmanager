@@ -6,6 +6,6 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
 
-	<context:mbean-server />
-	<context:mbean-export />
+<!-- 	<context:mbean-server /> -->
+<!-- 	<context:mbean-export /> -->
 </beans>

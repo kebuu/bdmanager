@@ -77,13 +77,22 @@ public class BdManagerEmbededServer extends AbstractMain {
                 // Create dispatcher servlet
                 DispatcherServlet dispatcherServlet = BdManagerWebConfigurerHelper.createDispatcherServlet(webApplicationContext);
                 
+                final XmlWebApplicationContext webApplicationContextBatch = new XmlWebApplicationContext();
+                webApplicationContextBatch.setServletContext(servletContext);
+                webApplicationContextBatch.setConfigLocations(new String[] {"classpath*:spring/batch/servlet-config.xml","classpath*:spring/batch/webapp-config.xml"});
+                webApplicationContextBatch.refresh();
+                webApplicationContextBatch.registerShutdownHook();
+            	DispatcherServlet dispatcherServletBatch = new DispatcherServlet(webApplicationContextBatch);
+            	
                 // Use dispatcher servlet in servlet context holder
+            	servletContextHandler.addServlet(new ServletHolder(dispatcherServletBatch), "/batch/*");
                 servletContextHandler.addServlet(new ServletHolder(dispatcherServlet), "/*");
                 servletContextHandler.addLifeCycleListener(new AbstractLifeCycleListener() {
                     
                     @Override
                     public void lifeCycleStarting(LifeCycle event) {
                         servletContext.addListener(new ContextLoaderListener(webApplicationContext));
+                        servletContext.addListener(new ContextLoaderListener(webApplicationContextBatch));
                     }
                 });
                 
