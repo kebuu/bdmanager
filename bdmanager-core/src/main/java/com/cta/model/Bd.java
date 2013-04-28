@@ -27,4 +27,5 @@ public class Bd extends Model{
 	
 	protected String title;
 	protected Date publicationDate;
+	protected Integer positionInSerie;
 }

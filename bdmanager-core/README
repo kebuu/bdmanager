@@ -1,4 +1,4 @@
 TESTING CLOUDBEES
 
 Deploy to cloudbees with embeded server : 
->bees app:deploy target/bdmanager-0.0.1-SNAPSHOT.jar -t java -Rjava_version=1.7 -Rclass=com.cta.web.BdManagerEmbededServer -Rargs=-Dapp.port=$app_port -a ctardella/cta-cloudbees
+>bees app:deploy bdmanager-standalone/target/bdmanager-standalone-0.0.1-SNAPSHOT.jar -t java -Rjava_version=1.7 -Rclass=com.cta.web.BdManagerEmbededServer -Rargs=-Dapp.port=$app_port -a ctardella/bdmanager

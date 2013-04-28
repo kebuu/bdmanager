@@ -35,4 +35,9 @@ public class Serie extends Model {
 	protected String name;
 	protected String synopsis;
 	protected Float mark;
+	
+	public void addBd(Bd bd) {
+		bds.add(bd);
+		bd.setSerie(this);
+	}
 }

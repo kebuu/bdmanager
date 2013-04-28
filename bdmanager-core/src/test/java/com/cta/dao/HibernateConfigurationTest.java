@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.junit.Test;
@@ -39,6 +40,23 @@ public class HibernateConfigurationTest extends BaseSpringTest {
 		assertEquals(3, series.get(2).getBds().size());
 		assertEquals(1, series.get(3).getBds().size());
 		assertEquals(4, series.get(4).getBds().size());
+		
+		// Just to check another query style
+		assertEquals(5, sessionFactory.getCurrentSession().createCriteria(Serie.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list().size());
+	}
+	
+	@Test
+	@Transactional
+	public void testAddBdToSerie() {
+		Session currentSession = sessionFactory.getCurrentSession();
+		Serie serie = (Serie) currentSession.createQuery("from Serie where id = -1").uniqueResult();
+		
+		Bd bd = new Bd(); 
+		bd.setTitle("NewBd");
+		serie.addBd(bd);
+		
+		currentSession.flush();
+		assertEquals(5, currentSession.createQuery("select bds from Serie as serie join serie.bds as bds where serie.id = -1").list().size());
 	}
 	
 	@Test
@@ -71,6 +89,5 @@ public class HibernateConfigurationTest extends BaseSpringTest {
 		.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<?> result = criteria.list();
 		assertEquals(4, result.size());
-		
 	}
 } 
