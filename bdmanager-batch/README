@@ -1,0 +1,6 @@
+Lancer un batch en ligne de commande : 
+
+java -classpath "./lib/*" org.springframework.batch.core.launch.support.CommandLineJobRunner spring/main-context.xml batchName parameters
+
+Avec batchName = l'id du spring be représentant la batch à lancer
+et parameters une suite de paramètres séparés par des espaces (' ') au format name(type)=valeur (le type étant optionnel)

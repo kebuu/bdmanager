@@ -4,6 +4,12 @@
 	   http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-2.1.xsd">
 
 	<!-- INFRASTRUCTURE -->
+	<bean id="jobRegistry" class="org.springframework.batch.core.configuration.support.MapJobRegistry" />
+	
+	<bean class="org.springframework.batch.core.configuration.support.JobRegistryBeanPostProcessor">
+		<property name="jobRegistry" ref="jobRegistry" />
+	</bean>
+	
 	<bean id="jobRepository" class="org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean">
 		<property name="transactionManager" ref="transactionManager" />
 	</bean>
@@ -13,7 +19,7 @@
 	<bean id="jobLauncher" class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
 		<property name="jobRepository" ref="jobRepository" />
 	</bean>
-	
+
 	<!-- JOB -->
 	<batch:job id="helloWorldJob" job-repository="jobRepository">
 		<batch:step id="hello">
@@ -31,7 +37,7 @@
 			<batch:tasklet transaction-manager="transactionManager">
 				<batch:chunk commit-interval="100" reader="mesBdReaderCsv" writer="mesBdWriterBdToDatabase" skip-limit="10">
 					<batch:skippable-exception-classes>
-						<batch:include class="com.cta.batch.exception.UnknownSerieException"/>
+						<batch:include class="com.cta.batch.exception.UnknownSerieException" />
 					</batch:skippable-exception-classes>
 				</batch:chunk>
 			</batch:tasklet>
@@ -78,13 +84,13 @@
 
 	<!-- WRITER -->
 	<bean id="simpleLoggerWriter" class="com.cta.batch.writer.SimpleLoggerWriter" />
-	
+
 	<bean id="hibernateBaseItemWriter" abstract="true">
-        <property name="sessionFactory" ref="hibernateSessionFactory" />
+		<property name="sessionFactory" ref="hibernateSessionFactory" />
 	</bean>
 
 	<bean id="mesBdWriterSerieToDatabase" class="com.cta.batch.writer.SerieWriter" parent="hibernateBaseItemWriter" />
 	<bean id="mesBdWriterBdToDatabase" class="com.cta.batch.writer.BdWriter" parent="hibernateBaseItemWriter" />
-	
+
 	<bean id="serieAndBdToElasticSearchWriter" class="com.cta.batch.writer.SerieAndBdToElasticSearchWriter" />
 </beans>

@@ -6,6 +6,7 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
 	<import resource="classpath:spring/main-context.xml"/>
+	<import resource="classpath:spring/batch-context.xml"/>
 	<import resource="classpath:spring/web-app-context.xml"/>
 
 </beans>

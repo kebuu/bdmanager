@@ -1,2 +1,0 @@
-Deploy to cloudbees : 
->bees app:deploy bdmanager-search/target/bdmanager-search-0.0.1-SNAPSHOT.jar -t java -Rjava_version=1.7 -Rclass=com.cta.search.ElasticSearchServer -Rargs=-Dtransport.tcp.port=$app_port -a ctardella/bdmanager-search

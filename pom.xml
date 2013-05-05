@@ -13,7 +13,6 @@
 		<module>bdmanager-batch</module>
 		<module>bdmanager-web</module>
 		<module>bdmanager-test</module>
-		<module>bdmanager-search</module>
 	</modules>
 	
 	<properties>
