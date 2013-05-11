@@ -57,6 +57,7 @@ public class HibernateConfigurationTest extends BaseSpringTest {
 		
 		currentSession.flush();
 		assertEquals(5, currentSession.createQuery("select bds from Serie as serie join serie.bds as bds where serie.id = -1").list().size());
+		assertEquals(Integer.valueOf(4), bd.getPositionInSerie());
 	}
 	
 	@Test

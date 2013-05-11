@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 public class Bd extends Model{
 
 	@ManyToOne(fetch=FetchType.EAGER, targetEntity=Serie.class, cascade=CascadeType.ALL)
-	@JoinColumn(name="serie_id", nullable=true, unique=false, updatable=true)
+	@JoinColumn(name="serie_id", nullable=true, updatable=true)
 	@JsonBackReference
 	protected Serie serie;
 	

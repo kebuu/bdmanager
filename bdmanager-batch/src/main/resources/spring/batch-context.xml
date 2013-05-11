@@ -10,11 +10,20 @@
 		<property name="jobRegistry" ref="jobRegistry" />
 	</bean>
 	
-	<bean id="jobRepository" class="org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean">
-		<property name="transactionManager" ref="transactionManager" />
+	<batch:job-repository id="jobRepository" data-source="datasource" transaction-manager="txManager" />
+	
+	<bean id="jobRepositoryMetadataSchemaHelper" class="com.cta.batch.helper.JobRepositoryMetadataSchemaHelper">
+		<property name="datasource" ref="datasource" />
+		<property name="createBatchSchemaOnStartup"  value="${create.batch.schema.on.startup:true}" />
+		<property name="dropBatchSchemaOnStartup" value="${drop.batch.schema.on.startup:false}" />
 	</bean>
+	
+	<!-- For in memory job repository -->
+<!-- 	<bean id="jobRepository" class="org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean"> -->
+<!-- 		<property name="transactionManager" ref="transactionManager" /> -->
+<!-- 	</bean> -->
 
-	<bean id="transactionManager" class="org.springframework.batch.support.transaction.ResourcelessTransactionManager" />
+<!-- 	<bean id="transactionManager" class="org.springframework.batch.support.transaction.ResourcelessTransactionManager" /> -->
 
 	<bean id="jobLauncher" class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
 		<property name="jobRepository" ref="jobRepository" />
@@ -23,18 +32,18 @@
 	<!-- JOB -->
 	<batch:job id="helloWorldJob" job-repository="jobRepository">
 		<batch:step id="hello">
-			<batch:tasklet ref="helloWolrdTasklet" />
+			<batch:tasklet transaction-manager="txManager" ref="helloWolrdTasklet" />
 		</batch:step>
 	</batch:job>
 
 	<batch:job id="fillSerieAndBdFromCsv" job-repository="jobRepository">
 		<batch:step id="readWriteSerieFromCsv" next="readWriteBdFromCsv">
-			<batch:tasklet transaction-manager="transactionManager">
+			<batch:tasklet transaction-manager="txManager">
 				<batch:chunk commit-interval="1000" reader="mesBdReaderCsv" writer="mesBdWriterSerieToDatabase" />
 			</batch:tasklet>
 		</batch:step>
 		<batch:step id="readWriteBdFromCsv">
-			<batch:tasklet transaction-manager="transactionManager">
+			<batch:tasklet transaction-manager="txManager">
 				<batch:chunk commit-interval="100" reader="mesBdReaderCsv" writer="mesBdWriterBdToDatabase" skip-limit="10">
 					<batch:skippable-exception-classes>
 						<batch:include class="com.cta.batch.exception.UnknownSerieException" />
@@ -45,15 +54,31 @@
 	</batch:job>
 
 	<batch:job id="fromDatabaseToElasticSearch" job-repository="jobRepository">
+		<batch:step id="clearElasticSearchIndex" next="readWriteSerieFromDatabaseToElasticSearch">
+			<batch:tasklet transaction-manager="txManager" ref="clearElasticSearchIndexTasklet" />
+		</batch:step>
 		<batch:step id="readWriteSerieFromDatabaseToElasticSearch">
-			<batch:tasklet transaction-manager="transactionManager">
+			<batch:tasklet transaction-manager="txManager">
 				<batch:chunk commit-interval="100" reader="serieWithBdFromDatabaseReader" writer="serieAndBdToElasticSearchWriter" />
 			</batch:tasklet>
 		</batch:step>
 	</batch:job>
 
+	<batch:job id="setupAll" job-repository="jobRepository">
+		<batch:step id="loadDataToDatabase" next="loadDataToSearchEngine">
+			<batch:job ref="fillSerieAndBdFromCsv" />
+		</batch:step>
+		<batch:step id="loadDataToSearchEngine">
+			<batch:job ref="fromDatabaseToElasticSearch" />
+		</batch:step>
+	</batch:job>
+
 	<!-- TASKLET -->
 	<bean id="helloWolrdTasklet" class="com.cta.batch.tasklet.HelloWolrdTasklet" />
+	
+	<bean id="clearElasticSearchIndexTasklet" class="com.cta.batch.tasklet.ClearElasticSearchIndexTasklet">
+		<property name="searchEngineDao" ref="searchEngineDao" />
+	</bean>
 
 	<!-- READER -->
 	<bean id="mesBdReaderCsv" class="org.springframework.batch.item.file.FlatFileItemReader">
@@ -92,5 +117,7 @@
 	<bean id="mesBdWriterSerieToDatabase" class="com.cta.batch.writer.SerieWriter" parent="hibernateBaseItemWriter" />
 	<bean id="mesBdWriterBdToDatabase" class="com.cta.batch.writer.BdWriter" parent="hibernateBaseItemWriter" />
 
-	<bean id="serieAndBdToElasticSearchWriter" class="com.cta.batch.writer.SerieAndBdToElasticSearchWriter" />
+	<bean id="serieAndBdToElasticSearchWriter" class="com.cta.batch.writer.SerieAndBdToElasticSearchWriter">
+		<property name="searchEngineDao" ref="searchEngineDao" />
+	</bean>
 </beans>

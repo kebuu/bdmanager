@@ -1,6 +1,6 @@
 package com.cta.search;
 
-public interface SearchConstants {
+public interface SearchEngineConstants {
 
 	static String INDEX_NAME = "bdmanager";
 	static String SERIE_TYPE_NAME = "serie";

@@ -7,7 +7,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderColumn;
+import javax.persistence.OrderBy;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,9 +27,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 public class Serie extends Model {
 	
 	@OneToMany(mappedBy="serie", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	@OrderColumn(name="positionInSerie", nullable=false)
 	@Fetch(FetchMode.JOIN)
 	@JsonManagedReference
+	@OrderBy("positionInSerie")
 	protected List<Bd> bds = new ArrayList<Bd>();
 	
 	protected String name;
@@ -39,5 +39,9 @@ public class Serie extends Model {
 	public void addBd(Bd bd) {
 		bds.add(bd);
 		bd.setSerie(this);
+		
+		if(bd.getPositionInSerie() == null) {
+			bd.setPositionInSerie(bds.size() - 1);
+		}
 	}
 }

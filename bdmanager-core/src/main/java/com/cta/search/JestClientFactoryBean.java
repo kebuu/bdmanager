@@ -28,7 +28,7 @@ public class JestClientFactoryBean extends AbstractFactoryBean<JestClient> {
 		ClientConfig clientConfig = new ClientConfig();
 		LinkedHashSet<String> servers = new LinkedHashSet<String>();
 		servers.add("http://api.searchbox.io/api-key/" + searchBoxApiKey);
-		clientConfig.getServerProperties().put(ClientConstants.SERVER_LIST,servers);
+		clientConfig.getProperties().put(ClientConstants.SERVER_LIST,servers);
 
 		// Construct a new Jest client according to configuration via factory
 		JestClientFactory factory = new JestClientFactory();

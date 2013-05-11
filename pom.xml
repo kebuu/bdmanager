@@ -38,7 +38,7 @@
 		<restassured.version>1.7.2</restassured.version>
 		<guava.version>13.0.1</guava.version>
 		<elasticsearch.version>0.20.5</elasticsearch.version>
-		<jest.version>0.0.1</jest.version>
+		<jest.version>0.0.3</jest.version>
 		
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>

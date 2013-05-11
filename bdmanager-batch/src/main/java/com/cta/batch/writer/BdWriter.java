@@ -35,7 +35,7 @@ public class BdWriter implements ItemWriter<BdFromCsv> {
                 } else {
                 	Bd bd = getBdInSerie(serie, bdFromCsv.getTitre());
                 	if(bd == null) {
-                		serie.getBds().add(createBd(bdFromCsv));
+                		serie.addBd(createBd(bdFromCsv));
                 	} 
                 }
             }

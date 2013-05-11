@@ -6,4 +6,9 @@
 	<bean id="jestClientFactoryBean" class="com.cta.search.JestClientFactoryBean">
 		<property name="searchBoxApiKey" value="${search.box.api.key:}" />
 	</bean>	
+	
+	<bean id="searchEngineDao" class="com.cta.search.dao.impl.SearchBoxSearchEngineDao">
+		<property name="jestClient" ref="jestClientFactoryBean" />
+	</bean>
+
 </beans>
