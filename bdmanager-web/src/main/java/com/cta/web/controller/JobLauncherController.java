@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,8 @@ public class JobLauncherController {
 	private static final String JOB_PARAM_NAME = "job";
 	
 	@Autowired
+	private JobOperator jobOperator;
+	@Autowired
 	private JobLauncher jobLauncher;
 	@Autowired
 	private JobRegistry jobRegistry;
@@ -31,6 +34,12 @@ public class JobLauncherController {
 	public void launch(@RequestParam String job, HttpServletRequest request) throws Exception {
 		JobParametersBuilder builder = extractParameters(request);
 		jobLauncher.run(jobRegistry.getJob(request.getParameter(JOB_PARAM_NAME)), builder.toJobParameters());
+	}
+	
+	@RequestMapping(value="/launch/next", method=RequestMethod.GET)
+	@ResponseStatus(HttpStatus.ACCEPTED)
+	public void launchNext(@RequestParam String job, HttpServletRequest request) throws Exception {
+		jobOperator.startNextInstance(request.getParameter(JOB_PARAM_NAME));
 	}
 
 	private JobParametersBuilder extractParameters(HttpServletRequest request) {

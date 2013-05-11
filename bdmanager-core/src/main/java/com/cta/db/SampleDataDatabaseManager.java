@@ -32,7 +32,7 @@ public class SampleDataDatabaseManager implements InitializingBean {
 	public void afterPropertiesSet() throws Exception {
 		if (loadSampleData) {
 			if(sampleDataAlreadyLoaded()) {
-				log.info("/!\\ Sample data seem already loaded");
+				log.info("Sample data seem already loaded");
 			} else {
 				log.info("Loading sample data");
 				loadSampleData();
