@@ -16,6 +16,7 @@ import org.springframework.web.context.support.XmlWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
 import com.cta.main.AbstractMain;
+import com.cta.web.service.ShutdownService;
 import com.google.common.collect.ImmutableList;
 
 
@@ -71,7 +72,9 @@ public class BdManagerEmbededServer extends AbstractMain {
                 BdManagerWebConfigurerHelper.configureSpringSecurityFilter(servletContext);
                 
                 // Configure spring web context
-                final XmlWebApplicationContext webApplicationContext = BdManagerWebConfigurerHelper.configureSpringContext(servletContext);
+                final XmlWebApplicationContext webApplicationContext = BdManagerWebConfigurerHelper.configureSpringContext(servletContext, "classpath:spring/standalone-context.xml");
+                ShutdownService shutdownService = webApplicationContext.getBean(ShutdownService.class);
+                shutdownService.setServer(this);
                 webApplicationContext.registerShutdownHook();
                 
                 // Create dispatcher servlet
@@ -89,6 +92,7 @@ public class BdManagerEmbededServer extends AbstractMain {
                 
                 // Start server
                 server = new Server(port);
+                server.setGracefulShutdown(500);
                 server.setHandler(servletContextHandler);
                 server.start();
                 
@@ -103,7 +107,7 @@ public class BdManagerEmbededServer extends AbstractMain {
         }
     }
 
-    protected void stop() {
+    public void stop() {
 		if(server != null) {
 			try {
 				server.stop();
