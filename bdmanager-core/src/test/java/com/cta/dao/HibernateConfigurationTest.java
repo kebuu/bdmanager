@@ -8,9 +8,11 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.metadata.ClassMetadata;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -90,5 +92,14 @@ public class HibernateConfigurationTest extends BaseSpringTest {
 		.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<?> result = criteria.list();
 		assertEquals(4, result.size());
+	}
+	
+	@Test
+	@Transactional
+	public void testSqlQuery() {
+		SQLQuery sqlQuery = sessionFactory.getCurrentSession().createSQLQuery("select * from serie");
+		ClassMetadata classMetadata = sessionFactory.getClassMetadata(Bd.class);
+		sqlQuery.setResultTransformer(new MapResultTransformer());
+		System.out.println(sqlQuery.list());
 	}
 } 
