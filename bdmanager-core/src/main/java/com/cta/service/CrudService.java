@@ -1,6 +1,7 @@
 package com.cta.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,11 +39,11 @@ public interface CrudService {
 	CrudResult delete(String resourceName, Long resourceId);
 	
 	/**
-	 * Recupere la iste de toutes les ressources du type donne
+	 * Recupere la liste de toutes les ressources du type donne
 	 * @param resourceClassName Le type de ressource demande
 	 * @return La liste des ressources trouvees
 	 */
-	List<Object> list(String resourceName);
+	List<? extends Object> list(String resourceName);
 	
 	/**
 	 * Recupere une ressource par son type et son id
@@ -51,4 +52,12 @@ public interface CrudService {
 	 * @return La ressource demandee, ou nulle si cette derniere n'a pas ete trouvee
 	 */
 	Object get(String resourceName, Long id);
+	
+	/**
+	 * Recupere la liste de toutes les ressources du type donne en ne gardant que les propriete qui sont dans la table principale.
+	 * Le retour est une liste de Map<String, Object> avec en clé le nom de la propriété.
+	 * @param resourceClassName Le type de ressource demande
+	 * @return La liste des ressources trouvees
+	 */
+	List<Map<String, ? extends Object>> listShort(String resourceName);
 }

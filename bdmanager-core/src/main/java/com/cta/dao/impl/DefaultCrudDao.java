@@ -1,12 +1,15 @@
 package com.cta.dao.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
 import com.cta.dao.CrudDao;
+import com.cta.dao.TableToMapResultTransformer;
 import com.cta.dto.crud.CrudResult;
 import com.cta.dto.crud.CrudResult.CrudOperation;
 
@@ -51,6 +54,14 @@ public class DefaultCrudDao extends AbstractDao implements CrudDao {
 	@SuppressWarnings("unchecked")
 	public List<? extends Object> list(String resourceClassName) {
 		return getSession().createQuery("from " + resourceClassName).list();
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Map<String, ? extends Object>> listShort(String resourceClassName, Class<?> resourceClass) {
+		SQLQuery sqlQuery = sessionFactory.getCurrentSession().createSQLQuery("select * from " + resourceClassName);
+		sqlQuery.setResultTransformer(new TableToMapResultTransformer(sessionFactory, resourceClass));
+		return sqlQuery.list();
 	}
 	
 	@Override

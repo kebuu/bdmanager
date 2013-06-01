@@ -1,6 +1,7 @@
 package com.cta.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import lombok.Setter;
 
@@ -22,10 +23,15 @@ public class DefaultCrudService implements CrudService {
 	protected ValidationService validationService;
 	
 	@Override
-	@SuppressWarnings("unchecked")
-	public List<Object> list(String resourceName) {
+	public List<? extends Object> list(String resourceName) {
 		Class<?> className = modelService.getQualifiedResourceClassName(resourceName);
-		return (List<Object>) crudDao.list(className.getSimpleName());
+		return (List<? extends Object>) crudDao.list(className.getSimpleName());
+	}
+	
+	@Override
+	public List<Map<String, ? extends Object>> listShort(String resourceName) {
+		Class<?> className = modelService.getQualifiedResourceClassName(resourceName);
+		return (List<Map<String, ? extends Object>>) crudDao.listShort(className.getSimpleName(), className);
 	}
 	
 	@Override

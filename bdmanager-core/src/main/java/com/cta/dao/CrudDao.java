@@ -1,6 +1,7 @@
 package com.cta.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,4 +45,13 @@ public interface CrudDao {
 	 * @return La ressource demandee, ou nulle si cette derniere n'a pas ete trouvee
 	 */
 	Object get(Class<?> resourceClass, Long id);
+
+	/**
+	 * Recupere la liste de toutes les ressources du type donne en ne gardant que les propriete qui sont dans la table principale.
+	 * Le retour est une liste de Map<String, Object> avec en clé le nom de la propriété.
+	 * @param resourceClassName Le type de ressource demandee
+	 * @param className La classe du type de ressource demandee
+	 * @return La liste des ressources trouvees
+	 */
+	List<Map<String, ? extends Object>> listShort(String resourceClassName, Class<?> className);
 }
