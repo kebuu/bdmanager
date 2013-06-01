@@ -69,7 +69,7 @@ public class BdManagerEmbededServer extends AbstractMain {
                 final ServletContext servletContext = servletContextHandler.getServletContext();
                 
                 // Configure spring security
-                BdManagerWebConfigurerHelper.configureSpringSecurityFilter(servletContext);
+                //BdManagerWebConfigurerHelper.configureSpringSecurityFilter(servletContext);
                 
                 // Configure spring web context
                 final XmlWebApplicationContext webApplicationContext = BdManagerWebConfigurerHelper.configureSpringContext(servletContext, "classpath:spring/standalone-context.xml");

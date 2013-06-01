@@ -97,7 +97,7 @@
 	<bean id="mesBdReaderCsv" class="org.springframework.batch.item.file.FlatFileItemReader">
 		<property name="linesToSkip" value="1" />
 		<property name="comments" value="'#{{'#'}}'" />
-		<property name="resource" value="data/MesBDs.csv" />
+		<property name="resource" value="classpath:data/MesBDs.csv" />
 		<property name="lineMapper" ref="csvToBdMapper" />
 	</bean>
 

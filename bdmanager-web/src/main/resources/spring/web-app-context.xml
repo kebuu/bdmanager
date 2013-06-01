@@ -19,19 +19,25 @@
 		</mvc:message-converters>
 	</mvc:annotation-driven>
 
-	<mvc:resources location="classpath:/static/image/favicon.ico" mapping="/favicon.ico" />
-	<mvc:resources location="classpath:/static/" mapping="/static/**" />
-	<mvc:resources location="classpath:/static/swagger-ui/" mapping="/documentation/**" />
+	<mvc:resources location="classpath:/static/image/favicon.ico" mapping="/favicon.ico" order="-100"/>
+	<mvc:resources location="classpath:/static/" mapping="/static/**" order="-100"/>
+	<mvc:resources location="classpath:/static/swagger-ui/" mapping="/documentation/**" order="-100"/>
 
 	<bean id="customLocaleChangeInterceptor" class="com.cta.web.interceptor.CustomLocaleChangeInterceptor">
 		<property name="localeResolver" ref="compositeLocaleResolver" />
 		<property name="localeService" ref="localeService" />
 	</bean>
+	
+	<bean id="crossDomainInterceptor" class="com.cta.web.interceptor.CrossDomainInterceptor" />
 
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
 			<ref bean="customLocaleChangeInterceptor" />
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<ref bean="crossDomainInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>
 
