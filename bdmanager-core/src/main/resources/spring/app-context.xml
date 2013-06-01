@@ -12,6 +12,10 @@
 	<bean id="appConfig" class="com.cta.config.impl.AppConfigImpl">
 		<property name="debugModeActive" value="${debug.mode.active}" />
 		<property name="dateConverterFormats" value="#{'${search.date.formats}'.split(',')}" />
+		<property name="crossDomainAllowedHeaders" value="${cross.domain.allowed.headers:content-type, accept, x-requested-with, origin}" />
+		<property name="crossDomainAllowedMethods" value="${cross.domain.allowed.methods:GET, POST, PUT, DELETE, OPTIONS}" />
+		<property name="crossDomainAllowedOrigins" value="${cross.domain.allowed.origins:*}" />
+		<property name="crossDomainMaxAge" value="${cross.domain.max.age:1800}" />
 	</bean>
 	
 	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
