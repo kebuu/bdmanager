@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @ToString(exclude="serie")
 @Setter
 @Getter
-public class Bd extends Model{
+public class Bd extends Model {
 
 	@ManyToOne(fetch=FetchType.EAGER, targetEntity=Serie.class, cascade=CascadeType.ALL)
 	@JoinColumn(name="serie_id", nullable=true, updatable=true)
@@ -28,4 +28,8 @@ public class Bd extends Model{
 	protected String title;
 	protected Date publicationDate;
 	protected Integer positionInSerie;
+	
+	public Long getSerieId() {
+		return serie.getId();
+	}
 }
