@@ -13,10 +13,10 @@ public interface SearchEngineDao {
 	
 	void index(Bd bd);
 	
-	void configureMapping();
-	
 	<T> List<Class<T>> search(String query, Class<T> clazz);
 
+	String search(String query);
+	
 	void indexBulk(Serie serie, Bulk bulk);
 	
 	void indexBulk(Bd bd, Bulk bulk);
@@ -24,4 +24,9 @@ public interface SearchEngineDao {
 	void executeBulk(Bulk bulk);
 	
 	void clearIndexType(String indexName, String typeName);
+
+	void createIndex(String indexName, String jsonConfig);
+
+	void configureTypeMapping(String indexName, String typeName, String typeMapping);
+
 }

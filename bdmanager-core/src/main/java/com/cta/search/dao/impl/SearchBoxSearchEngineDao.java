@@ -6,6 +6,7 @@ import io.searchbox.core.Delete;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.indices.CreateIndex;
+import io.searchbox.indices.PutMapping;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import lombok.Data;
 import lombok.SneakyThrows;
 
 import org.elasticsearch.common.settings.ImmutableSettings;
+import org.elasticsearch.common.settings.Settings;
 
 import com.cta.model.Bd;
 import com.cta.model.Serie;
@@ -56,20 +58,23 @@ public class SearchBoxSearchEngineDao implements SearchEngineDao {
 
 	@Override
 	@SneakyThrows
-	public void configureMapping() {
-		ImmutableSettings.Builder settingsBuilder = ImmutableSettings.settingsBuilder();
-		settingsBuilder.put("number_of_shards", 5);
-		settingsBuilder.put("number_of_replicas", 1);
-
-		jestClient.execute(new CreateIndex(SearchEngineConstants.INDEX_NAME, settingsBuilder.build().getAsMap()));
+	public void configureTypeMapping(String indexName, String typeName, String typeMapping) {
+		PutMapping putMapping = new PutMapping(indexName, typeName, typeMapping);
+		jestClient.execute(putMapping);
 	}
-
+	
 	@Override
 	@SneakyThrows
 	public <T> List<Class<T>> search(String query, Class<T> clazz) {
 		Search search = new Search(query);
-		search.addIndex(SearchEngineConstants.INDEX_NAME);
 		return jestClient.execute(search).getSourceAsObjectList(clazz);
+	}
+	
+	@Override
+	@SneakyThrows
+	public String search(String query) {
+		Search search = new Search(query);
+		return jestClient.execute(search).getJsonString();
 	}
 
 	@Override
@@ -78,10 +83,16 @@ public class SearchBoxSearchEngineDao implements SearchEngineDao {
 		Delete deleteAction = new Delete.Builder().index(indexName).type(typeName).build();
 		jestClient.execute(deleteAction);
 	}
+	
+	@Override
+	@SneakyThrows
+	public void createIndex(String indexName, String jsonConfig) {
+		Settings setting = ImmutableSettings.settingsBuilder().loadFromSource(jsonConfig).build();
+		jestClient.execute(new CreateIndex(indexName, setting.getAsMap()));
+	}
 
 	private Index createSerieIndex(Serie serie) {
-		return new Index.Builder(new IndexableSerie(serie)).index(SearchEngineConstants.INDEX_NAME)
-				.type(SearchEngineConstants.SERIE_TYPE_NAME).build();
+		return new Index.Builder(new IndexableSerie(serie)).index(SearchEngineConstants.INDEX_NAME).type(SearchEngineConstants.SERIE_TYPE_NAME).build();
 	}
 
 	private Index createBdIndex(Bd bd) {
