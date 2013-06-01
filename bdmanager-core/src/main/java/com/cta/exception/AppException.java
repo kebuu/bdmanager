@@ -16,6 +16,7 @@ public class AppException extends RuntimeException {
 	public static final String DEFAULT_EXCEPTION_CODE = "unhandled.exception";
 	
 	protected String code = DEFAULT_EXCEPTION_CODE;
+	protected String developperMessage;
 	protected Object[] arguments;
 	
 	public AppException(Throwable cause) {

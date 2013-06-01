@@ -1,7 +1,6 @@
 package com.cta.web.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -17,7 +16,7 @@ public class SearchControllerTest extends BaseSpringWebTest {
     	.andExpect(status().isOk())
     	.andExpect(jsonPath("$[1]").exists());
     	
-    	this.mockMvc.perform(get("/search/serie?id=-1&id_op_=gte").accept(MediaType.APPLICATION_JSON)).andDo(print())
+    	this.mockMvc.perform(get("/search/serie?id=-1&id_op_=gte").accept(MediaType.APPLICATION_JSON))
     	.andExpect(status().isOk())
     	.andExpect(jsonPath("$[1]").doesNotExist());
     	

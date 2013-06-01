@@ -3,8 +3,10 @@ package com.cta.dao;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -12,7 +14,6 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.metadata.ClassMetadata;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -96,10 +97,18 @@ public class HibernateConfigurationTest extends BaseSpringTest {
 	
 	@Test
 	@Transactional
+	@SuppressWarnings("unchecked")
 	public void testSqlQuery() {
-		SQLQuery sqlQuery = sessionFactory.getCurrentSession().createSQLQuery("select * from serie");
-		ClassMetadata classMetadata = sessionFactory.getClassMetadata(Bd.class);
-		sqlQuery.setResultTransformer(new MapResultTransformer());
-		System.out.println(sqlQuery.list());
+		SQLQuery sqlQuery = sessionFactory.getCurrentSession().createSQLQuery("select * from bd");
+		sqlQuery.setResultTransformer(new TableToMapResultTransformer(sessionFactory, Bd.class));
+		List<Map<String, Object>> list = sqlQuery.list();
+		Map<String, Object> bdAsMap = list.get(0);
+		assertNull(bdAsMap.get("serieId"));
+		
+		sqlQuery = sessionFactory.getCurrentSession().createSQLQuery("select * from serie");
+		sqlQuery.setResultTransformer(new TableToMapResultTransformer(sessionFactory, Serie.class));
+		list = sqlQuery.list();
+		Map<String, Object> serieAsMap = list.get(0);
+		assertNull(serieAsMap.get("bds"));
 	}
 } 

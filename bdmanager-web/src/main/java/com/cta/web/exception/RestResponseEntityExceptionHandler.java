@@ -29,7 +29,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     @ExceptionHandler
     public ResponseEntity<ExceptionInfo> resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         ExceptionInfo exceptionInfo = getExceptionInfo(ex, appConfig.isDebugModeActive());
-        log.error(exceptionInfo.toString());
+        log.error(exceptionInfo.toString(), ex);
         return new ResponseEntity<>(exceptionInfo, getStatus(ex));
     }
     
