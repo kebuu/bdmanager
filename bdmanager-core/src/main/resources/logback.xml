@@ -3,6 +3,7 @@
 	<!-- To enable JMX Management -->
 	<jmxConfigurator />
 
+	<property resource="conf/config.properties" />
 	<property name="pattern.layout" value="%date{dd-MMM HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n%rEx{short}" />
 
 	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -30,7 +31,12 @@
 	<logger name="com.mangofactory" level="error" />
 
 	<root level="INFO">
-		<appender-ref ref="FILE" />
+		<if condition="${log.file.appender.enabled}">
+			<then>
+				<appender-ref ref="FILE" />
+			</then>
+		</if>
+		
 		<appender-ref ref="STDOUT" />
 	</root>
 </configuration>

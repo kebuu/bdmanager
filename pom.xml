@@ -39,6 +39,7 @@
 		<guava.version>13.0.1</guava.version>
 		<elasticsearch.version>0.20.5</elasticsearch.version>
 		<jest.version>0.0.3</jest.version>
+		<janino.version>2.6.1</janino.version>
 		
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
