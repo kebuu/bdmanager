@@ -9,3 +9,4 @@ rebel-remote.xml
 
 *.h2.db
 *.lock.db
+filter_cloudbees.properties

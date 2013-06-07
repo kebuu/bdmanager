@@ -6,7 +6,7 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
 
-	<context:property-placeholder ignore-resource-not-found="true" location="classpath:conf/config.properties,classpath:conf/config_credentials.properties" />
+	<context:property-placeholder ignore-resource-not-found="true" location="classpath:conf/config.properties" />
 	
 	<import resource="classpath:spring/jmx-context.xml"/>
 	<import resource="classpath:spring/app-context.xml"/>

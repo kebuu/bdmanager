@@ -9,6 +9,10 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
+	<properties>
+		<filter.file.suffix>default</filter.file.suffix>
+	</properties>
+
 	<repositories>
 		<repository>
 			<id>sonatype</id>
@@ -16,6 +20,37 @@
 			<url>https://oss.sonatype.org/content/groups/public/</url>
 		</repository>
 	</repositories>
+
+	<profiles>
+		<profile>
+			<id>cloudbees</id>
+			<properties>
+				<filter.file.suffix>cloudbees</filter.file.suffix>
+			</properties>
+		</profile>
+	</profiles>
+
+	<build>
+		<filters>
+			<filter>${basedir}/src/main/filters/filter_${filter.file.suffix}.properties</filter>
+		</filters>
+		<resources>
+			<resource>
+				<directory>${basedir}/src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/conf/*.properties</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>${basedir}/src/main/resources</directory>
+				<filtering>false</filtering>
+				<excludes>
+					<exclude>**/conf/*.properties</exclude>
+				</excludes>
+			</resource>
+		</resources>
+	</build>
 
 	<dependencies>
 		<dependency>
