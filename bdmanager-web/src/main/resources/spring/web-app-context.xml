@@ -19,15 +19,15 @@
 		</mvc:message-converters>
 	</mvc:annotation-driven>
 
-	<mvc:resources location="classpath:/static/image/favicon.ico" mapping="/favicon.ico" order="-100"/>
-	<mvc:resources location="classpath:/static/" mapping="/static/**" order="-100"/>
-	<mvc:resources location="classpath:/static/swagger-ui/" mapping="/documentation/**" order="-100"/>
+	<mvc:resources location="classpath:/static/image/favicon.ico" mapping="/favicon.ico" order="-100" />
+	<mvc:resources location="classpath:/static/" mapping="/static/**" order="-100" />
+	<mvc:resources location="classpath:/static/swagger-ui/" mapping="/documentation/**" order="-100" />
 
 	<bean id="customLocaleChangeInterceptor" class="com.cta.web.interceptor.CustomLocaleChangeInterceptor">
 		<property name="localeResolver" ref="compositeLocaleResolver" />
 		<property name="localeService" ref="localeService" />
 	</bean>
-	
+
 	<bean id="crossDomainInterceptor" class="com.cta.web.interceptor.CrossDomainInterceptor" />
 
 	<mvc:interceptors>
@@ -69,20 +69,8 @@
 		</property>
 	</bean>
 
-	<bean id="swaggerConfiguration" class="com.mangofactory.swagger.SwaggerConfiguration">
-		<property name="basePath">
-			<null />
-		</property>
-		<property name="apiVersion" value="1.0" />
-		<property name="extensions">
-			<bean class="com.mangofactory.swagger.SwaggerConfigurationExtension">
-				<property name="ignorableParameterTypes">
-					<list>
-						<value>org.springframework.web.context.request.WebRequest</value>
-					</list>
-				</property>
-			</bean>
-		</property>
-	</bean>
-
+	<!-- SWAGGER -->
+	<bean id="customDocumentationConfig" class="com.cta.web.swagger.CustomDocumentationConfig" />
+	<bean id="customExtensibilityModule" class="com.cta.web.swagger.CustomExtensibilityModule" primary="true"/>
+	
 </beans>

@@ -33,7 +33,7 @@
 		<h2.database.version>1.3.170</h2.database.version>
 		<json.path.version>0.8.1</json.path.version>
 		<junit.version>4.11</junit.version>
-		<swagger.springmvc.version>0.3.2</swagger.springmvc.version>
+		<swagger.springmvc.version>0.5.2</swagger.springmvc.version>
 		<beanutils.version>1.8.3</beanutils.version>
 		<restassured.version>1.7.2</restassured.version>
 		<guava.version>13.0.1</guava.version>
