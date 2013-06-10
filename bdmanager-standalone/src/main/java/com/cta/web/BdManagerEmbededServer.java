@@ -40,8 +40,8 @@ public class BdManagerEmbededServer extends AbstractMain {
 	}
 		
 	public static void main(String[] args) {
-	    BdManagerEmbededServer embleddedServer = new BdManagerEmbededServer();
-	    embleddedServer.execute(args, true);
+	    BdManagerEmbededServer embeddedServer = new BdManagerEmbededServer();
+	    embeddedServer.execute(args, true);
 	}
 
 	protected void execute(String[] args, boolean joinServerThread) {
