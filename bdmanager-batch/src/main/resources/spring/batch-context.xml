@@ -105,7 +105,7 @@
 		<property name="lineTokenizer">
 			<bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
 				<property name="delimiter" value="," />
-				<property name="names" value="serie,tome,titre,sousTitre,auteurs,editeurs" />
+				<property name="names" value="serie,tome,titre,sousTitre,auteurs,editeur" />
 			</bean>
 		</property>
 		<property name="fieldSetMapper">

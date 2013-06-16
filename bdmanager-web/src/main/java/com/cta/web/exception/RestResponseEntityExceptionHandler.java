@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -46,8 +47,12 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	   Object[] exceptionMessageArguments = ArrayUtils.EMPTY_OBJECT_ARRAY;
 	   
 	   if(ex instanceof AppException) {
-		   exceptionCode = ((AppException) ex).getCode();
-		   exceptionMessageArguments = ((AppException) ex).getArguments();
+		   AppException appException = (AppException) ex;
+		   exceptionCode = appException.getCode();
+		   exceptionMessageArguments = appException.getArguments();
+		   if(StringUtils.isNotBlank(appException.getDeveloperMessage())) {
+			   log.error("Developer message : " + appException.getDeveloperMessage());
+		   }
        } 
 	   String exceptionMessage = messageSource.getMessage(exceptionCode, exceptionMessageArguments);
 	   

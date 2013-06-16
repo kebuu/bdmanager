@@ -16,8 +16,14 @@ public class AppException extends RuntimeException {
 	public static final String DEFAULT_EXCEPTION_CODE = "unhandled.exception";
 	
 	protected String code = DEFAULT_EXCEPTION_CODE;
-	protected String developperMessage;
+	protected String developerMessage;
 	protected Object[] arguments;
+
+	public static AppException developerOriented(String developerMessage) {
+		AppException appException =  new AppException();
+		appException.setDeveloperMessage(developerMessage);
+		return appException;
+	}
 	
 	public AppException(Throwable cause) {
 		super(cause);
@@ -29,6 +35,15 @@ public class AppException extends RuntimeException {
 	}
 	
 	public AppException(String code, Throwable cause, Object... arguments) {
+		this(code, null, cause, arguments);
+	}
+	
+	public AppException(String code, String developperMessage, Object... arguments) {
+		this.code = code;
+		this.arguments = arguments;
+	}
+	
+	public AppException(String code, String developperMessage, Throwable cause, Object... arguments) {
 		super(cause);
 		this.code = code;
 		this.arguments = arguments;

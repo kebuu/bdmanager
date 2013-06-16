@@ -36,9 +36,17 @@ public class BdWriter implements ItemWriter<BdFromCsv> {
                 	Bd bd = getBdInSerie(serie, bdFromCsv.getTitre());
                 	if(bd == null) {
                 		serie.addBd(createBd(bdFromCsv));
-                	} 
+                	} else {
+                		updateBdProperties(bd, bdFromCsv);
+                	}
+                	
+                	if(bdFromCsv.getTome() == null) {
+                		bd.setPositionInSerie(0);
+                	}
                 }
             }
+            
+            
             session.getTransaction().commit();
         } finally {
             if(session != null) {
@@ -47,27 +55,40 @@ public class BdWriter implements ItemWriter<BdFromCsv> {
         }
 	}
 
+	private void updateBdProperties(Bd bd, BdFromCsv bdFromCsv) {
+		bd.setPositionInSerie(bdFromCsv.getTome());
+		bd.setEditor(bdFromCsv.getEditeur());
+	}
+
 	private Bd getBdInSerie(Serie serie, String bdTitle) {
+		Bd result = null;
+		
 		for (Bd bd : serie.getBds()) {
 			if(bd.getTitle().equals(bdTitle)) {
-				return bd;
+				result = bd;
+				break;
 			}
 		}
-		return null;
+		return result;
 	}
 
 	private Bd createBd(BdFromCsv bdFromCsv) {
 		Bd bd = new Bd();
 		bd.setTitle(bdFromCsv.getTitre());
+		bd.setPositionInSerie(bdFromCsv.getTome());
+		bd.setEditor(bdFromCsv.getEditeur());
 		return bd;
 	}
 
 	private Serie getSerieByName(List<Serie> series, String serieName) {
+		Serie result = null;
+		
 		for (Serie serie : series) {
 			if(serie.getName().equals(serieName)) {
-				return serie;
+				result = serie;
+				break;
 			}
 		}
-		return null;
+		return result;
 	}
 }

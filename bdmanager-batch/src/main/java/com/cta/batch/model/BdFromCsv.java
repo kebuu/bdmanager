@@ -6,9 +6,9 @@ import lombok.Data;
 public class BdFromCsv {
 
     protected String serie;
-    protected String tome;
+    protected Integer tome;
     protected String titre;
     protected String sousTitre;
     protected String auteurs;
-    protected String editeurs;
+    protected String editeur;
 }
