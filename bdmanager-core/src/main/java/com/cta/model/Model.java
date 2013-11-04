@@ -9,6 +9,7 @@ import javax.persistence.Version;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
 
 @MappedSuperclass
 @Getter
@@ -23,5 +24,10 @@ public abstract class Model {
 	@Version
 	protected int version; 
 	
-	
+	@SneakyThrows
+	public static <T extends Model> T newInstanceWithId(Class<T> clazz, Long id) {
+		T newInstance = clazz.newInstance();
+		newInstance.setId(id);
+		return newInstance;
+	}
 }

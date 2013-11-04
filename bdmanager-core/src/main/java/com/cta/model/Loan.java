@@ -1,7 +1,7 @@
 package com.cta.model;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
@@ -9,6 +9,8 @@ import javax.persistence.ManyToOne;
 
 import lombok.Getter;
 import lombok.Setter;
+
+import com.google.common.collect.Sets;
 
 @Entity 
 @Setter
@@ -19,7 +21,7 @@ public class Loan extends Model {
 	protected User user;
 	
 	@ManyToMany
-	protected List<Bd> bds;
+	protected Set<Bd> bds = Sets.newHashSet();
 	
 	protected Date startDate;
 	protected Date endDate;

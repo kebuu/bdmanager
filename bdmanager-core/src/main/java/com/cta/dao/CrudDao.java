@@ -18,7 +18,7 @@ public interface CrudDao {
 	CrudResult create(Object resource);
 	
 	/**
-	 * Met a jour une ressource. Si la ressource.
+	 * Met a jour une ressource. Si la ressource existe.
 	 * @param resource La ressource a mettre a jour
 	 * @return true si la mise a jour s'est deroulee correctement, false notamment si la ressoure n'a pas ete trouvee
 	 */
